@@ -1,0 +1,8 @@
+,NetName,NNode,NEdges,NMetric,NUltra
+0,comorbidity.gpickle,95,8930,4236,194
+1,hostpathogen.gpickle,10578,18529,18431,18429
+2,calls_duration.gpickle,290,488,447,428
+3,giraffe_affiliative.gpickle,6,30,23,9
+4,avg_trip_duration.gpickle,750,212937,70224,1584
+5,PoP_volume_flow.gpickle,11,30,30,30
+6,water_pipes.gpickle,1836,2351,2342,2253
