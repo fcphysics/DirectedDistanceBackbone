@@ -12,9 +12,6 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 import networkx as nx
 
-#446 {}
-#446 501 {'duration': 15240, 'ntrips': 25, 'distance': 609.6}
-#[Finished in 1.4s]
 
 if __name__ == '__main__':
 
@@ -36,13 +33,13 @@ if __name__ == '__main__':
     dfg.reset_index(inplace=True)
 
     # Remove self-loops (i == j)
-    dfg = dfg.loc[~(dfg['i'] ==dfg['j']), :]
+    dfg = dfg.loc[~(dfg['i'] == dfg['j']), :]
 
     # to DiGraph
     G = nx.from_pandas_edgelist(dfg, source='i', target='j', edge_attr=['avg-trip-duration'], create_using=nx.DiGraph)
 
     # Add MetaData
-    dfm = pd.read_csv('metadata.txt', index_col=0)
+    dfm = pd.read_csv('stations.csv', index_col=0)
     #
     nx.set_node_attributes(G, name='label', values=dfm['name'])
     nx.set_node_attributes(G, name='lat', values=dfm['lat'])
