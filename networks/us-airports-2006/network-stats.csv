@@ -1,0 +1,11 @@
+,us-airports
+n-nodes,1082
+n-edges,18922
+density,0.016177599641599736
+n-edges-metric,5231
+n-edges-ultrametric,3604
+%-edges-metric,0.27645069231582287
+%-edges-ultrametric,0.19046612408836275
+%-redundancy-metric,0.7235493076841771
+%-redundancy-ultrametric,0.8095338759116373
+%-edges-ultrametric/metric,0.688969604282164
