@@ -33,17 +33,18 @@ if __name__ == '__main__':
 
     # Rename
     dfg.rename(columns={'Duration': 'sum-duration', 'Bike Id': 'count-trips'}, inplace=True)
-    dfg.index.rename({'StartStation Id': 'i', 'EndStation Id': 'j'}, inplace=True)
+    #dfg.index.rename({'StartStation Id': 'i', 'EndStation Id': 'j'}, inplace=True)
 
     # FILTER: Min of 5 trips to be considered an edge
     dfg = dfg.loc[dfg['count-trips'] >= 7, :]
 
     # Avg trip duration
     dfg['avg-trip-duration'] = dfg['sum-duration'] / dfg['count-trips']
-    print(dfg.head())
 
     # Reset index
     dfg.reset_index(inplace=True)
+    dfg.rename(columns={'StartStation Id': 'i', 'EndStation Id': 'j'}, inplace=True)
+    print(dfg.head())
 
     # Remove self-loops (i == j)
     dfg = dfg.loc[~(dfg['i'] == dfg['j']), :]
