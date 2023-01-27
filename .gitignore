@@ -4,9 +4,40 @@
 networks/bike-sharing/stations.csv
 networks/bike-sharing/trips.zip
 
+# comorbidity
+networks/comorbidity/comorbidity_networks-master.zip
+networks/comorbidity/comorbidity_odds_matrix.csv
+
+# giraffe
+networks/giraffe/GiraffeSocialization.pdf
+
+# host-pathogen
+networks/host-pathogen/SpeciesInteractions_EID2.csv
+
+# phone-calls
+networks/phone-calls/calls.csv
+
+# pop-flow
+networks/pop-flow/TM-ESTIMATION.zip
+networks/pop-flow/SAND_TM_Estimation_Data.mat
+
+# water-pipes
+networks/water-pipes/exnet.inp
+
+# us-airports-2006
+networks/oldREADME.md
+networks/us-airports-2006/983081491_T_MASTER_CORD.zip
+networks/us-airports-2006/983062542_T_T100D_SEGMENT_US_CARRIER_ONLY.zip
+
+# Networks to ignore
+networks/quantum
+networks/DDI
+
 # Do not upload large graph files
 *.gpickle
 *.graphml
+# Nor distortion plots
+#*.pdf
 
 # User defined
 .DS_Store
