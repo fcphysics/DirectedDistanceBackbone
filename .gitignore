@@ -7,6 +7,7 @@ networks/DDI
 # Do not upload local files
 LOCAL/
 networks/example.py
+*old/
 
 # New stuff for now
 new_networks/
@@ -18,7 +19,6 @@ script_stat
 # Do not upload large graph files
 *.gpickle
 *.graphml
-*.gpk
 # Nor distortion plots
 *.pdf
 

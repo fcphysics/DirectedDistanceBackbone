@@ -6,3 +6,5 @@ Comp. Psychol 121(1), 46–53 (2007)
 
 Files used:
 - `giraffe_affiliative.edgelist`: data
+
+In this social network, directed edge weights represent the frequency in which giraffes interacts with each other.
