@@ -33,6 +33,17 @@ networks/us-airports-2006/983062542_T_T100D_SEGMENT_US_CARRIER_ONLY.zip
 networks/quantum
 networks/DDI
 
+# Do not upload local files
+LOCAL/
+networks/example.py
+
+# New stuff for now
+new_networks/
+
+# Run scripts
+script_dist
+script_stat
+
 # Do not upload large graph files
 *.gpickle
 *.graphml
