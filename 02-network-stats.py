@@ -1,8 +1,8 @@
 # coding=utf-8
-# Author: Rion B Correia
-# Date: Dec 07, 2020
+# Author: Rion B Correia & Felipe Xavier Costa
+# Date: Feb 22, 2023
 #
-# Description: Reads a network and computes closure.
+# Description: Reads a network and computes backbone size statistics.
 #
 #
 import numpy as np
@@ -14,8 +14,8 @@ pd.set_option('display.width', 1000)
 import networkx as nx
 import argparse
 import configparser
-from utils import extract_metric_graph, extract_ultrametric_graph
-
+from utils import get_asymmetry_distribution
+import pickle as pk
 
 if __name__ == '__main__':
 
@@ -39,26 +39,35 @@ if __name__ == '__main__':
     folder = settings.get('folder')
 
     # Files
-    rGpickle = 'networks/{folder:s}/network-closure.gpickle'.format(folder=folder)
-    rGedgelist = 'networks/{folder:s}/network-closure.csv.gz'.format(folder=folder)
+    rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
+    rBfile = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
+    
     wGstats = 'networks/{folder:s}/network-stats.csv'.format(folder=folder)
-
-    # Load Closure
-    G = nx.read_gpickle(rGpickle)
-
-    # Extract Backbones from edge property (see utils.py)
-    Gm = extract_metric_graph(G)
-    Gu = extract_ultrametric_graph(G)
-
+    wFasymmetry = 'networks/{folder:s}/backbone_asymmetry.pickle'.format(folder=folder)
+    
+    # Load graph
+    G = nx.read_graphml(rGfile)
+    
     # Calculate stats
     n_nodes = G.number_of_nodes()
     n_edges = G.number_of_edges()
 
     density = nx.density(G)
-
-    n_edges_metric = Gm.number_of_edges()
-    n_edges_ultrametric = Gu.number_of_edges()
-
+    
+    # New asymmetry dist
+    alpha = dict()
+        
+    # Load backbone
+    # Metric
+    G = nx.read_graphml(rBfile)
+    n_edges_metric = G.number_of_edges()
+    alpha['metric'] = get_asymmetry_distribution(G)
+    # Ultrametric
+    edges2remove = [(i, j) for i, j, d in G.edges(data=True) if 'ultrametric' not in d]
+    G.remove_edges_from(edges2remove)
+    n_edges_ultrametric = G.number_of_edges()
+    alpha['ultrametric'] = get_asymmetry_distribution(G)
+    
     # to Result Series
     sR = pd.Series({
         'n-nodes': n_nodes,
@@ -82,3 +91,6 @@ if __name__ == '__main__':
     # Print
     print(sR)
     sR.to_csv(wGstats)
+    print('> Asymmetry')
+    pk.dump(alpha, open(wFasymmetry, 'wb'))
+    print("\n\n")

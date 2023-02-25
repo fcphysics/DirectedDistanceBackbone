@@ -15,7 +15,7 @@ import networkx as nx
 import argparse
 import configparser
 from utils import extract_metric_graph, extract_ultrametric_graph
-
+import pickle as pk
 
 if __name__ == '__main__':
 
@@ -39,28 +39,22 @@ if __name__ == '__main__':
     folder = settings.get('folder')
 
     # Files
-    rGpickle = 'networks/{folder:s}/network-closure.gpickle'.format(folder=folder)
-    rGedgelist = 'networks/{folder:s}/network-closure.csv.gz'.format(folder=folder)
+    rFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
     wGstats = 'networks/{folder:s}/distortion-stats.csv'.format(folder=folder)
 
-    # Load Closure
-    G = nx.read_gpickle(rGpickle)
-    ss = pd.Series([d.get('s-value') for i, j, d in G.edges(data=True)], name='s-value')
     # Select only s-values
-    dfs = ss.loc[(ss > 1.0)].sort_values(ascending=False).to_frame()
+    dfs = pd.DataFrame().from_dict(pk.load(open(rFdistortion, 'rb')))
     print(dfs.head())
-
-    n_nodes = G.number_of_nodes()
-    n_edges = G.number_of_edges()
 
     # to Result Series
     sR = pd.Series({
-        'n-nodes': n_nodes,
-        'n-edges': n_edges,
+        'avg-metric-distrotion': dfs['metric'].mean(),
+        'std-metric-distrotion': dfs['metric'].std(),
+        'med-metric-distrotion': dfs['metric'].median(),
         #
-        'avg-metric-distrotion': dfs['s-value'].mean(),
-        'std-metric-distrotion': dfs['s-value'].std(),
-        #
+        'avg-ultrametric-distrotion': dfs['ultrametric'].mean(),
+        'std-ultrametric-distrotion': dfs['ultrametric'].std(),
+        'med-ultrametric-distrotion': dfs['ultrametric'].median(),
     }, name=network, dtype='object')
 
     # Print

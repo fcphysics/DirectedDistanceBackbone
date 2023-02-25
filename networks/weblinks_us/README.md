@@ -8,3 +8,5 @@ Files used:
 - `{state}/nodes.txt` : metadata
 
 Edge weights are relative hyperlink counts between webpages that belong to different U.S. states.
+
+This network contains multiple weakly connected components, and it's largest correspond to 99.65% of the entire network.

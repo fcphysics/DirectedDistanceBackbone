@@ -8,17 +8,19 @@ networks/DDI
 LOCAL/
 networks/example.py
 *old/
+sanity_checks.ipynb
+BackboneSummary.csv
 
 # New stuff for now
 new_networks/
 
 # Run scripts
-script_dist
-script_stat
+script*
 
 # Do not upload large graph files
 *.gpickle
 *.graphml
+*.pickle
 # Nor distortion plots
 *.pdf
 
