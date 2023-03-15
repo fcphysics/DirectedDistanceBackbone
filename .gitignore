@@ -10,6 +10,7 @@ networks/example.py
 *old/
 sanity_checks.ipynb
 BackboneSummary.csv
+nohup.out
 
 # New stuff for now
 new_networks/

@@ -88,6 +88,7 @@ if __name__ == '__main__':
 
         D_dict = nx.get_edge_attributes(G, name=weight_attr)
         P_dict = {key: dist2prox(value) for key, value in D_dict.items()}
+    
 
     if (min(P_dict.values()) < 0) or (max(P_dict.values()) > 1.0):
         raise TypeError("Proximity values not in [0,1]")
@@ -98,6 +99,6 @@ if __name__ == '__main__':
     nx.set_edge_attributes(G, name='proximity', values=P_dict)
     nx.set_edge_attributes(G, name='distance', values=D_dict)
     
-    print('> Backbone')
+    print('> Network')
     nx.write_graphml(G, wGgraphml)
     
