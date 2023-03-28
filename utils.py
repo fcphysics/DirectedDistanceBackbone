@@ -86,3 +86,18 @@ def get_asymmetry_distribution(G, weight='proximity'):
                 alpha_values.append(1.0)
                 
     return alpha_values
+
+def fuzzy_reciprocity(G, weight='proximity'):
+    
+    pbar = sum(list(dict(nx.get_edge_attributes(G, name=weight)).values()))/(G.number_of_nodes()*(G.number_of_nodes() - 1))    
+    
+    cov = 0
+    stdev = 0
+    for u, v in G.edges():
+        if G.has_edge(v, u):
+            cov += (G[u][v][weight] - pbar)*(G[v][u][weight] - pbar)
+        else:
+            cov -= pbar*(G[u][v][weight] - pbar)
+        stdev += (G[u][v][weight] - pbar)*(G[u][v][weight] - pbar)
+    
+    return cov/stdev

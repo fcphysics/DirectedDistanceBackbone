@@ -13,8 +13,9 @@ LOCAL/
 networks/example.py
 *old/
 sanity_checks.ipynb
-BackboneSummary.csv
 nohup.out
+undirect*
+Summary/
 
 # New stuff for now
 new_networks/
