@@ -17,8 +17,6 @@ import configparser
 from utils import extract_metric_graph, extract_ultrametric_graph
 import pickle as pk
 
-DIRECTIONALITY = False
-
 if __name__ == '__main__':
 
     #
@@ -40,14 +38,9 @@ if __name__ == '__main__':
     settings = config[network]
     folder = settings.get('folder')
 
-    if DIRECTIONALITY:
-        # Files
-        rFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
-        wGstats = 'networks/{folder:s}/distortion-stats.csv'.format(folder=folder)
-    else:
-        # Files
-        rFdistortion = 'networks/{folder:s}/undirected_distortion.pickle'.format(folder=folder)
-        wGstats = 'networks/{folder:s}/undirected_distortion-stats.csv'.format(folder=folder)
+    # Files
+    rFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
+    wGstats = 'networks/{folder:s}/distortion-stats.csv'.format(folder=folder)
 
     # Select only s-values
     dfs = pd.DataFrame().from_dict(pk.load(open(rFdistortion, 'rb')))

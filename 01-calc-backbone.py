@@ -23,8 +23,6 @@ from distanceclosure.utils import dist2prox
 from utils import ensurePathExists, get_asymmetry_distribution
 import pickle as pk
 
-DIRECTIONALITY = False
-
 if __name__ == '__main__':
 
     #
@@ -50,35 +48,23 @@ if __name__ == '__main__':
     weight_type = settings.get('weight-type')
     weight_attr = settings.get('weight-attr')
     norm_min_support = 10
-    
-    
-    if DIRECTIONALITY:
-        # Files
-        wGgraphml = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
-        wFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
-        wFasymmetry = 'networks/{folder:s}/asymmetry.pickle'.format(folder=folder)
-        
-        # Load Network
-        rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
-    else:
-        # Files
-        wGgraphml = 'networks/{folder:s}/undirected_backbone.graphml'.format(folder=folder)
-        wFdistortion = 'networks/{folder:s}/undirected_distortion.pickle'.format(folder=folder)
-        wFasymmetry = 'networks/{folder:s}/undirected_asymmetry.pickle'.format(folder=folder)
 
-        # Load Network
-        rGfile = 'networks/{folder:s}/undirected_network.graphml'.format(folder=folder)
-        
+    # Files
+    wGgraphml = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
+    wFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
+    wFasymmetry = 'networks/{folder:s}/asymmetry.pickle'.format(folder=folder)
+
+    # Load Network
+    print("Loading network: {network:s}".format(network=network))
+    rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
 
     # Load graph
-    print("Loading network: {network:s}".format(network=network))
     G = nx.read_graphml(rGfile)
     
     #
     # Asymmetry distribution
     #
-    if DIRECTIONALITY:
-        alpha = get_asymmetry_distribution(G)
+    alpha = get_asymmetry_distribution(G)
     
     # Dictionary of distortion distribution
     distortion_dist = dict()
@@ -104,9 +90,6 @@ if __name__ == '__main__':
     nx.write_graphml(G, wGgraphml)
     print('> Distortion')
     pk.dump(distortion_dist, open(wFdistortion, 'wb'))
-    
-    if DIRECTIONALITY:
-        print('> Asymmetry')
-        pk.dump(alpha, open(wFasymmetry, 'wb'))
-    
+    print('> Asymmetry')
+    pk.dump(alpha, open(wFasymmetry, 'wb'))
     print('\n\n')
