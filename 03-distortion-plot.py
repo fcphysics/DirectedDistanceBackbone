@@ -54,7 +54,7 @@ def plot_s_dist(folder, kind='metric', date=None):
     print('sigma:', sigma)
 
     # Compare
-    R, p = fit.distribution_compare('power_law', 'lognormal')
+    R, p = fit.distribution_compare('power_law', 'lognormal_positive')
     print("R:", R, 'p-value', p)
 
     fig, ax = plt.subplots(figsize=(5, 4))
@@ -69,14 +69,14 @@ def plot_s_dist(folder, kind='metric', date=None):
         pw_goodness = '$\sigma = {sigma:.3f}$'.format(sigma=fit.power_law.sigma)
         ax.annotate(pw_goodness, xy=(.03, .05), xycoords='axes fraction', color='#1f77b4')
     else:
-        ln_goodness = '$\mu = {mu:.2f}; \sigma = {sigma:.3f}$'.format(mu=fit.lognormal.mu, sigma=fit.lognormal.sigma)
+        ln_goodness = '$\mu = {mu:.2f}; \sigma = {sigma:.3f}$'.format(mu=fit.lognormal_positive.mu, sigma=fit.lognormal_positive.sigma)
         ax.annotate(ln_goodness, xy=(.03, .05), xycoords='axes fraction', color='#2ca02c')
     #
     pw_label = r'Power law fit'
     ln_label = r'Lognormal fit'
 
     fit.power_law.plot_pdf(color='#aec7e8', linewidth=1, linestyle='--', label=pw_label, ax=ax)
-    fit.lognormal.plot_pdf(color='#98df8a', linewidth=1, linestyle='--', label=ln_label, ax=ax)
+    fit.lognormal_positive.plot_pdf(color='#98df8a', linewidth=1, linestyle='--', label=ln_label, ax=ax)
 
     #
     ax.set_title(r'Semi-metric edges ($s_{{ij}}>1)$' '\n' '{source:s}'.format(source=folder))
@@ -89,7 +89,8 @@ def plot_s_dist(folder, kind='metric', date=None):
 
     plt.tight_layout()
     # plt.subplots_adjust(left=0.09, right=0.98, bottom=0.07, top=0.90, wspace=0, hspace=0.0)
-    plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
+    #plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
+    plt.savefig('bike_trips.pdf', dpi=150, bbox_inches='tight')
 
 
 if __name__ == '__main__':
@@ -115,4 +116,4 @@ if __name__ == '__main__':
 
     # Plot Distortion Distribution
     plot_s_dist(folder, kind='metric')
-    plot_s_dist(folder, kind='ultrametric')
+    #plot_s_dist(folder, kind='ultrametric')
