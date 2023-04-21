@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+'''
+
 ##############################
 ## Backbone Size Comparison ##
 ##############################
@@ -24,7 +26,7 @@ ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arr
 
 #plt.show()
 plt.tight_layout()
-plt.savefig('SizeComparison.pdf', dpi=300)
+plt.savefig('Figures/SizeComparison.pdf', dpi=300)
 
 ##############################
 ## Fuzzy Reciprocity Change ##
@@ -61,32 +63,58 @@ for i in range(2):
     ax.annotate("Caviar Project", xy=(0.6718661800354505, outliers['caviar'][i]), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
     
     plt.tight_layout()
-    plt.savefig('{type:s}FuzzyReciprocity.pdf'.format(type=data['label'][i]), dpi=300)
+    plt.savefig('Figures/{type:s}FuzzyReciprocity.pdf'.format(type=data['label'][i]), dpi=300)
 
-###########################
-## Distortion Comparison ##
-###########################
+#####################################
+## Distortion Comparison - LogMean ##
+#####################################
 
 
 data = pd.read_csv('Summary/DistortionLogMean.csv', index_col=0)
 
-print(len(data.directed))
-
 fig, ax = plt.subplots(figsize=(6,6))
 
 ax.scatter(data.directed, data.undirected, s=50, c='b')
-ax.plot([0, 8], [0, 8], 'k-', lw=2)
+ax.plot([0.0625, 8], [0.0625, 8], 'k-', lw=2)
 ax.set_xlabel('Directed Distortion - Log Average')
 ax.set_ylabel('Undirected Distortion - Log Average')
 
-#ax.set_xscale("log")
-#ax.set_yscale("log")
+ax.set_xscale("log", base=2)
+ax.set_yscale("log", base=2)
 
 # Annotate networks that have larger undirected than directed backbone
 ax.annotate("Telephone Calls", xy=(0.569559151142854, 0.513767171865907), xytext=(1.0, 0.4), arrowprops=dict(arrowstyle="->"))
 ax.annotate("Drug Drug Interactions", xy=(0.874147261829192, 0.736701612921851), xytext=(1.5, 1.0), arrowprops=dict(arrowstyle="->"))
-ax.annotate("Co-morbidity Risk", xy=(0.275701591576709, 0.247037530217323), xytext=(1.0, 0.05), arrowprops=dict(arrowstyle="->"))
+ax.annotate("Co-morbidity Risk", xy=(0.275701591576709, 0.247037530217323), xytext=(1.0, 0.12), arrowprops=dict(arrowstyle="->"))
 
 #plt.show()
 plt.tight_layout()
-plt.savefig('DistortionComparison.pdf', dpi=300)
+plt.savefig('Figures/DistortionComparison.pdf', dpi=300)
+
+'''
+
+####################################
+## Distortion Comparison - Median ##
+####################################
+
+
+data = pd.read_csv('Summary/Distortion_Median.csv', index_col=0)
+
+fig, ax = plt.subplots(figsize=(6,6))
+
+ax.scatter(data.directed, data.undirected, s=50, c='b')
+ax.plot([1, 2048], [1, 2048], 'k-', lw=2)
+ax.set_xlabel('Directed Distortion - Median')
+ax.set_ylabel('Undirected Distortion - Median')
+
+ax.set_xscale("log", base=2)
+ax.set_yscale("log", base=2)
+
+# Annotate networks that have larger undirected than directed backbone
+ax.annotate("Telephone Calls", xy=(1.7674876847290641,1.6737934181360763), xytext=(8.0, 2.0), arrowprops=dict(arrowstyle="->"))
+ax.annotate("Drug Drug Interactions", xy=(2.3968306435179834, 2.08905174785705), xytext=(8.0, 4.0), arrowprops=dict(arrowstyle="->"))
+ax.annotate("Co-morbidity Risk", xy=(1.317454667101697, 1.2802271595641688), xytext=(4.0, 1.2), arrowprops=dict(arrowstyle="->"))
+
+#plt.show()
+plt.tight_layout()
+plt.savefig('Figures/DistortionMedianComparison.pdf', dpi=300)
