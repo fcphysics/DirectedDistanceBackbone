@@ -45,7 +45,7 @@ def plot_global_boxplots(dfp, kind='metric', part=1):
     dfp['s-values'] = lsvals
     #print(dfp)
     #
-    wImgFile = "compare-s-values-ordered-{kind:s}-part{part}.pdf".format(kind=kind, part=part)
+    wImgFile = "Figures/compare-s-values-ordered-{kind:s}-part{part}.pdf".format(kind=kind, part=part)
 
     # Plot
     fig, ax = plt.subplots(figsize=(5.5, 3.6))
