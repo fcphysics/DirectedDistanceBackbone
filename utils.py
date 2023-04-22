@@ -25,11 +25,6 @@ def extract_random_graph(G, edges_to_keep=0):
     return GR
 
 
-#def extract_n_random_graphs(G, n=1, *arg, **kwargs):
-#    for i in range(n):
-#        yield generate_random_graph(G, *arg, **kwargs)
-
-
 def extract_threshold_graph(G, edges_to_keep=0):
     GT = G.copy()
     edges2remove = sorted(GT.edges(data=True), key=lambda x: x[2]['weight'])[:-edges_to_keep]
