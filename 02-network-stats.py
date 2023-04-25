@@ -17,7 +17,6 @@ import configparser
 from utils import get_asymmetry_distribution
 import pickle as pk
 
-DIRECTIONALITY = False
 
 if __name__ == '__main__':
 
@@ -40,21 +39,12 @@ if __name__ == '__main__':
     settings = config[network]
     folder = settings.get('folder')
     
-    
-    if DIRECTIONALITY:
-        # Files
-        rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
-        rBfile = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
+    # Files
+    rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
+    rBfile = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
+    wGstats = 'networks/{folder:s}/network-stats.csv'.format(folder=folder)
+    wFasymmetry = 'networks/{folder:s}/backbone_asymmetry.pickle'.format(folder=folder)
 
-        wGstats = 'networks/{folder:s}/network-stats.csv'.format(folder=folder)
-        wFasymmetry = 'networks/{folder:s}/backbone_asymmetry.pickle'.format(folder=folder)
-    else:
-        # Files
-        rGfile = 'networks/{folder:s}/undirected_network.graphml'.format(folder=folder)
-        rBfile = 'networks/{folder:s}/undirected_backbone.graphml'.format(folder=folder)
-        
-        wGstats = 'networks/{folder:s}/undirected_network-stats.csv'.format(folder=folder)
-    
     # Load graph
     G = nx.read_graphml(rGfile)
     
@@ -68,16 +58,15 @@ if __name__ == '__main__':
     # Metric
     G = nx.read_graphml(rBfile)
     n_edges_metric = G.number_of_edges()
-    if DIRECTIONALITY:
-        # New asymmetry dist
-        alpha = dict()
-        alpha['metric'] = get_asymmetry_distribution(G)
+
+    # New asymmetry dist
+    alpha = dict()
+    alpha['metric'] = get_asymmetry_distribution(G)
     # Ultrametric
     edges2remove = [(i, j) for i, j, d in G.edges(data=True) if 'ultrametric' not in d]
     G.remove_edges_from(edges2remove)
     n_edges_ultrametric = G.number_of_edges()
-    if DIRECTIONALITY:
-        alpha['ultrametric'] = get_asymmetry_distribution(G)
+    alpha['ultrametric'] = get_asymmetry_distribution(G)
     
     # to Result Series
     sR = pd.Series({
@@ -102,7 +91,6 @@ if __name__ == '__main__':
     # Print
     print(sR)
     sR.to_csv(wGstats)
-    if DIRECTIONALITY:
-        print('> Asymmetry')
-        pk.dump(alpha, open(wFasymmetry, 'wb'))
+    print('> Asymmetry')
+    pk.dump(alpha, open(wFasymmetry, 'wb'))
     print("\n\n")
