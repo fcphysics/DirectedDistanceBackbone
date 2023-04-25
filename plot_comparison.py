@@ -1,33 +1,43 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import numpy as np
 
-'''
+import matplotlib
+matplotlib.use('TkAgg')
 
 ##############################
 ## Backbone Size Comparison ##
 ##############################
 
 
-data = pd.read_csv('Summary/BackboneSizeComparison.csv', index_col=0)
+data = pd.read_csv('Summary/MetricBackboneSizeComparison.csv', index_col=0)
 
 fig, ax = plt.subplots(figsize=(6,6))
 
-ax.scatter(data.directed, data.undirected, s=50, c='b')
+ax.scatter(data.directed, data.Avg, s=50, c='b', label='Average Strength')
+ax.scatter(data.directed, data.Max, s=50, c='g', label='Maximum Strength')
+ax.scatter(data.directed[:18], data.Min[:18], s=50, c='r', label='Minimum Strength')
 ax.plot([0, 1], [0, 1], 'k-', lw=2)
 ax.set_xlabel('Directed Backbone Size')
 ax.set_ylabel('Undirected Backbone Size')
+ax.legend()
+ax.set_aspect(1)
 
+X = np.maximum(np.maximum(data.Avg, data.Max), data.Min)
+Y = np.minimum(np.minimum(data.Avg, data.Max), list(data.Min)[:18]+[10, 10])
+ax.plot([data.directed, data.directed], [X, Y], 'k--', lw=1)
 
 # Annotate networks that have larger undirected than directed backbone
-ax.annotate("Manizales Mobility", xy=(0.084591, 0.085090), xytext=(0.0, 0.3), arrowprops=dict(arrowstyle="->"))
-ax.annotate("Giraffe Socialization", xy=(0.766667, 0.800000), xytext=(0.55, 0.9), arrowprops=dict(arrowstyle="->"))
-ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
+#ax.annotate("Manizales Mobility", xy=(0.084591, 0.085090), xytext=(0.0, 0.3), arrowprops=dict(arrowstyle="->"))
+#ax.annotate("Giraffe Socialization", xy=(0.766667, 0.800000), xytext=(0.55, 0.9), arrowprops=dict(arrowstyle="->"))
+#ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
 
 #plt.show()
 plt.tight_layout()
-plt.savefig('Figures/SizeComparison.pdf', dpi=300)
+plt.savefig('Figures/MetricSizeComparisonAll.pdf', dpi=300)
 
+'''
 ##############################
 ## Fuzzy Reciprocity Change ##
 ##############################
@@ -91,7 +101,7 @@ ax.annotate("Co-morbidity Risk", xy=(0.275701591576709, 0.247037530217323), xyte
 plt.tight_layout()
 plt.savefig('Figures/DistortionComparison.pdf', dpi=300)
 
-'''
+
 
 ####################################
 ## Distortion Comparison - Median ##
@@ -118,3 +128,5 @@ ax.annotate("Co-morbidity Risk", xy=(1.317454667101697, 1.2802271595641688), xyt
 #plt.show()
 plt.tight_layout()
 plt.savefig('Figures/DistortionMedianComparison.pdf', dpi=300)
+
+'''

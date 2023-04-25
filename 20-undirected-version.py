@@ -12,7 +12,7 @@ import configparser
 import distanceclosure as dc
 from distanceclosure.utils import prox2dist
 # Utils
-
+import pickle as pk
 
 if __name__ == '__main__':
 
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # Files
     rGraphml = 'networks/{folder:s}/network.graphml'.format(folder=folder)
-    wGraphml = 'networks/{folder:s}/undirected_network.graphml'.format(folder=folder)
+    wGraphml = 'networks/{folder:s}/undirected_networks.pickle'.format(folder=folder)
     
     # Load Network
     print("Loading network: {network:s}".format(network=network))
@@ -49,8 +49,9 @@ if __name__ == '__main__':
     
     nx.set_edge_attributes(G, values=None, name='alpha')
     
-    U = nx.Graph()
-    U.add_nodes_from(G.nodes())
+    U = {'min': nx.Graph(), 'max': nx.Graph(), 'avg': nx.Graph()}
+    for g in U.values():
+        g.add_nodes_from(G.nodes())
     
     for u, v, w in G.edges(data=True):
         if w['alpha'] == None:
@@ -59,16 +60,19 @@ if __name__ == '__main__':
             if G.has_edge(v, u):
                 G[v][u]['alpha'] = 0.0
                 pji = G[v][u]['proximity']
+                pmin = min(pij, pji)
+                U['min'].add_edge(u, v, distance=prox2dist(pmin))
             else:
                 pji = 0
             
             pmax = max(pij, pji)
-            pmin = min(pij, pji)
             pavg = 0.5*(pij+pji)        
                     
-            U.add_edge(u, v, min_distance=prox2dist(pmax), max_distance=prox2dist(pmin), avg_distance=prox2dist(pavg))
+            U['max'].add_edge(u, v, distance=prox2dist(pmax))
+            U['avg'].add_edge(u, v, distance=prox2dist(pavg))
 
-    nx.write_graphml(U, wGraphml)
+    #nx.write_graphml(U, wGraphml)
+    pk.dump(U, open(wGraphml, 'wb'))
     print("Done")
     
     

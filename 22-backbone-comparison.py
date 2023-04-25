@@ -36,27 +36,38 @@ if __name__ == '__main__':
     dGfile = 'networks/{folder:s}/network.graphml'
     dBfile = 'networks/{folder:s}/backbone.graphml'
     
-    uGfile = 'networks/{folder:s}/undirected_network.graphml'
-    uBfile = 'networks/{folder:s}/undirected_backbone.graphml'
+    uGfile = 'networks/{folder:s}/undirected_networks.pickle'
+    uBfile = 'networks/{folder:s}/undirected_backbones.pickle'
     
-    df = pd.DataFrame({'name': np.zeros(len(networks), dtype=str), 'directed': np.zeros(len(networks)), 'undirected': np.zeros(len(networks))})
+    dfM = pd.DataFrame({'name': np.zeros(len(networks), dtype=str), 'directed': np.zeros(len(networks)), 
+                       'Max': np.zeros(len(networks)), 'Min': np.zeros(len(networks)), 'Avg': np.zeros(len(networks))})
+    dfU = pd.DataFrame({'name': np.zeros(len(networks), dtype=str), 'directed': np.zeros(len(networks)), 
+                       'Max': np.zeros(len(networks)), 'Min': np.zeros(len(networks)), 'Avg': np.zeros(len(networks))})
     
     for idx, network in enumerate(networks):
         print(network)
         settings = config[network]
         folder = settings.get('folder')
         
-        df.name[idx] = network
+        dfM.loc[idx, 'name'] = network
+        dfU.loc[idx, 'name'] = network
         
         G = nx.read_graphml(dGfile.format(folder=folder))
         B = nx.read_graphml(dBfile.format(folder=folder))
         
-        df.directed[idx] = B.number_of_edges()/G.number_of_edges()
+        dfM.loc[idx, 'directed'] = B.number_of_edges()/G.number_of_edges()
+        dfU.loc[idx, 'directed'] = sum([int(d['ultrametric']) for _, _, d in B.edges(data=True)])/G.number_of_edges()
         
-        G = nx.read_graphml(uGfile.format(folder=folder))
-        B = nx.read_graphml(uBfile.format(folder=folder))
+        G = pk.load(open(uGfile.format(folder=folder), 'rb'))
+        B = pk.load(open(uBfile.format(folder=folder), 'rb'))
         
-        df.undirected[idx] = B.number_of_edges()/G.number_of_edges()
+        for type in ['min', 'max', 'avg']:
+            if G[type].number_of_edges() > 0:
+                dfM.loc[idx, type] = B[type].number_of_edges()/G[type].number_of_edges()
+                dfU.loc[idx, type] = sum([int(d['ultrametric']) for _, _, d in B[type].edges(data=True)])/G[type].number_of_edges()
+            else:
+                print(type)
     
-    df.to_csv("Summary/BackboneSizeComparison.csv")
+    dfM.to_csv("Summary/MetricBackboneSizeComparison.csv")
+    dfU.to_csv("Summary/UltrametricBackboneSizeComparison.csv")
     
