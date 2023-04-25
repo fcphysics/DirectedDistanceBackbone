@@ -80,7 +80,7 @@ if __name__ == '__main__':
     #
     U, s_values = dc.backbone(G, weight='distance', kind='ultrametric', distortion=True)
     distortion_dist['ultrametric'] = s_values
-    nx.set_edge_attributes(G, name='ultrametric', values={edg: True for edg in U.edges()})
+    nx.set_edge_attributes(G, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in G.edges()})
         
     print('--- Exporting Formats ---')
     ensurePathExists(wGgraphml)
