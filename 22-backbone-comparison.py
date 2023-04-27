@@ -24,6 +24,7 @@ import configparser
 # Networks
 import networkx as nx
 import pickle as pk
+    
 
 if __name__ == '__main__':
     #
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('networks.ini')
     networks = list(config.keys())[1:]
-    
+        
     dGfile = 'networks/{folder:s}/network.graphml'
     dBfile = 'networks/{folder:s}/backbone.graphml'
     
@@ -56,15 +57,15 @@ if __name__ == '__main__':
         B = nx.read_graphml(dBfile.format(folder=folder))
         
         dfM.loc[idx, 'directed'] = B.number_of_edges()/G.number_of_edges()
-        dfU.loc[idx, 'directed'] = sum([int(d['ultrametric']) for _, _, d in B.edges(data=True)])/G.number_of_edges()
+        dfU.loc[idx, 'directed'] = sum([int(w['ultrametric']) for _, _, w in B.edges(data=True)])/G.number_of_edges()
         
         G = pk.load(open(uGfile.format(folder=folder), 'rb'))
         B = pk.load(open(uBfile.format(folder=folder), 'rb'))
         
         for type in ['min', 'max', 'avg']:
             if G[type].number_of_edges() > 0:
-                dfM.loc[idx, type] = B[type].number_of_edges()/G[type].number_of_edges()
-                dfU.loc[idx, type] = sum([int(d['ultrametric']) for _, _, d in B[type].edges(data=True)])/G[type].number_of_edges()
+                dfM.loc[idx, type.capitalize()] = B[type].number_of_edges()/G[type].number_of_edges()
+                dfU.loc[idx, type.capitalize()] = sum([int(w['ultrametric']) for _, _, w in B[type].edges(data=True)])/G[type].number_of_edges()
             else:
                 print(type)
     

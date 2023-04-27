@@ -10,32 +10,34 @@ matplotlib.use('TkAgg')
 ## Backbone Size Comparison ##
 ##############################
 
-
-data = pd.read_csv('Summary/MetricBackboneSizeComparison.csv', index_col=0)
-
-fig, ax = plt.subplots(figsize=(6,6))
-
-ax.scatter(data.directed, data.Avg, s=50, c='b', label='Average Strength')
-ax.scatter(data.directed, data.Max, s=50, c='g', label='Maximum Strength')
-ax.scatter(data.directed[:18], data.Min[:18], s=50, c='r', label='Minimum Strength')
-ax.plot([0, 1], [0, 1], 'k-', lw=2)
-ax.set_xlabel('Directed Backbone Size')
-ax.set_ylabel('Undirected Backbone Size')
-ax.legend()
-ax.set_aspect(1)
-
-X = np.maximum(np.maximum(data.Avg, data.Max), data.Min)
-Y = np.minimum(np.minimum(data.Avg, data.Max), list(data.Min)[:18]+[10, 10])
-ax.plot([data.directed, data.directed], [X, Y], 'k--', lw=1)
-
-# Annotate networks that have larger undirected than directed backbone
-#ax.annotate("Manizales Mobility", xy=(0.084591, 0.085090), xytext=(0.0, 0.3), arrowprops=dict(arrowstyle="->"))
-#ax.annotate("Giraffe Socialization", xy=(0.766667, 0.800000), xytext=(0.55, 0.9), arrowprops=dict(arrowstyle="->"))
-#ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
-
-#plt.show()
-plt.tight_layout()
-plt.savefig('Figures/MetricSizeComparisonAll.pdf', dpi=300)
+for type in ['Metric', 'Ultrametric']:
+    data = pd.read_csv(f'Summary/{type}BackboneSizeComparison.csv', index_col=0)
+    
+    fig, ax = plt.subplots(figsize=(6,6))
+    
+    ax.scatter(data.directed, data.Avg, s=50, c='g', label='Average Strength', alpha=0.5, marker='s')
+    ax.scatter(data.directed, data.Max, s=50, c='b', label='Maximum Strength', alpha=0.5, marker='*')
+    ax.scatter(data.directed[:18], data.Min[:18], s=50, c='r', label='Minimum Strength', alpha=0.25, marker='o')
+    ax.plot([0, 1], [0, 1], 'k-', lw=2)
+    ax.set_xlabel('Directed Backbone Size')
+    ax.set_ylabel('Undirected Backbone Size')
+    ax.legend()
+    
+    X = np.maximum(np.maximum(data.Avg, data.Max), data.Min)
+    Y = np.minimum(np.minimum(data.Avg, data.Max), list(data.Min)[:18]+[10, 10])
+    ax.plot([data.directed, data.directed], [X, Y], 'k--', lw=1)
+    
+    ax.set_xlim((0, 0.05))
+    ax.set_ylim((0, 0.05))
+    ax.set_aspect(1)
+    # Annotate networks that have larger undirected than directed backbone
+    # #ax.annotate("Manizales Mobility", xy=(0.084591, 0.085090), xytext=(0.0, 0.3), arrowprops=dict(arrowstyle="->"))
+    # #ax.annotate("Giraffe Socialization", xy=(0.766667, 0.800000), xytext=(0.55, 0.9), arrowprops=dict(arrowstyle="->"))
+    # #ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
+    
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig(f'Figures/{type}SizeComparisonAllFocused.pdf', dpi=300)
 
 '''
 ##############################
