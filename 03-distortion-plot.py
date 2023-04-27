@@ -27,7 +27,6 @@ import powerlaw
 # IO Operations
 import argparse
 import configparser
-from utils import extract_metric_graph, extract_ultrametric_graph
 import pickle as pk
 
 def plot_s_dist(folder, kind='metric', date=None):
