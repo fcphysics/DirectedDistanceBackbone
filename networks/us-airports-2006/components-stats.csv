@@ -1,0 +1,7 @@
+,us-airports
+n-nodes,1075
+n-edges,18906
+n-edges-metric,5186
+n-nodes-lscc,995
+n-edges-lscc,18820
+n-edges-metric-lscc,5102

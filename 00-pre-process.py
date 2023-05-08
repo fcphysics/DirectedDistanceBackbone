@@ -80,15 +80,16 @@ if __name__ == '__main__':
     if weight_type in 'proximity':
 
         print('Prox -> Dist')
-        P_dict = nx.get_edge_attributes(G, weight_attr)
+        P_dict = dict(nx.get_edge_attributes(G, weight_attr))
         D_dict = {key: prox2dist(value) for key, value in P_dict.items()}
         nx.set_edge_attributes(G, name='distance', values=D_dict)
 
     if weight_type == 'distance':
 
-        D_dict = nx.get_edge_attributes(G, name=weight_attr)
+        D_dict = dict(nx.get_edge_attributes(G, name=weight_attr))
         P_dict = {key: dist2prox(value) for key, value in D_dict.items()}
     
+    print(P_dict.values())
 
     if (min(P_dict.values()) < 0) or (max(P_dict.values()) > 1.0):
         raise TypeError("Proximity values not in [0,1]")

@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # Files
     wGgraphml = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
     wFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
-    wFasymmetry = 'networks/{folder:s}/asymmetry.pickle'.format(folder=folder)
+    #wFasymmetry = 'networks/{folder:s}/asymmetry.pickle'.format(folder=folder)
     
     # Load Network
     rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder) 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     #
     # Asymmetry distribution
     #
-    alpha = get_asymmetry_distribution(G)
+    #alpha = get_asymmetry_distribution(G)
     
     # Dictionary of distortion distribution
     distortion_dist = dict()
@@ -85,13 +85,13 @@ if __name__ == '__main__':
     print('--- Exporting Formats ---')
     ensurePathExists(wGgraphml)
     ensurePathExists(wFdistortion)
-    ensurePathExists(wFasymmetry)
+    #ensurePathExists(wFasymmetry)
 
     print('> Backbone')
     nx.write_graphml(G, wGgraphml)
     print('> Distortion')
     pk.dump(distortion_dist, open(wFdistortion, 'wb'))
-    print('> Asymmetry')
-    pk.dump(alpha, open(wFasymmetry, 'wb'))
+    #print('> Asymmetry')
+    #pk.dump(alpha, open(wFasymmetry, 'wb'))
     
     print('\n\n')

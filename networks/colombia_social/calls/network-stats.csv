@@ -2,10 +2,10 @@
 n-nodes,863
 n-edges,438484
 density,0.5894346866405165
-n-edges-metric,2259
-n-edges-ultrametric,1746
-%-edges-metric,0.005151841344267978
-%-edges-ultrametric,0.003981901278039792
-%-redundancy-metric,0.9948481586557321
-%-redundancy-ultrametric,0.9960180987219602
-%-edges-ultrametric/metric,0.7729083665338646
+n-edges-metric,11407
+n-edges-ultrametric,3903
+%-edges-metric,0.026014632232875087
+%-edges-ultrametric,0.008901122960016786
+%-redundancy-metric,0.973985367767125
+%-redundancy-ultrametric,0.9910988770399832
+%-edges-ultrametric/metric,0.34215832383624095

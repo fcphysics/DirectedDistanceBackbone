@@ -96,3 +96,102 @@ def fuzzy_reciprocity(G, weight='proximity'):
         stdev += (G[u][v][weight] - pbar)*(G[u][v][weight] - pbar)
     
     return cov/stdev
+
+def venn3_sqr_diagram(Ne, Nb, Nc, Nbc, width=0.1, title=None):
+
+    import matplotlib.patches as mpatches
+    import matplotlib.pyplot as plt
+    import numpy as np
+    
+    fig, ax = plt.subplots(figsize=(5, 10))
+    fig.set_facecolor('tab:gray')
+    ax.set_facecolor('tab:gray')
+    
+    L1 = Nb/Ne
+    L2 = Nc/Ne
+    L3 = Nbc/Ne
+        
+    artist = [mpatches.Rectangle((0.0, 0.0), width, 1.0, color='b'),
+              mpatches.Rectangle((0.0, 0.0), width, L1, color='g'),
+              mpatches.Rectangle((0.0, L1-L3), width, L2, color='r', alpha=0.5)]
+    
+    for art in artist:
+        ax.add_artist(art)
+    
+    ax.text(0.5*width, 0.5*(L1-L3), Nb-Nbc, verticalalignment='center', horizontalalignment='center', color='w')
+    ax.text(0.5*width, (L1-L3)+0.5*L3, Nbc, verticalalignment='center', horizontalalignment='center', color='w')
+    ax.text(0.5*width, L1+0.5*(L2-L3), Nc-Nbc, verticalalignment='center', horizontalalignment='center', color='w')
+    ax.text(0.5*width, 0.5*(1+L1+L2-L3), Ne-(Nb+Nc-Nbc), verticalalignment='center', horizontalalignment='center', color='w')
+    
+    ax.text(1.01*width, 0.5*(L1-L3), 'Backbone WCC', verticalalignment='center', horizontalalignment='left', color='k')
+    ax.text(1.01*width, (L1-L3)+0.5*L3, 'Backbone LSCC', verticalalignment='center', horizontalalignment='left', color='k')
+    ax.text(1.01*width, L1+0.5*(L2-L3), 'Semi-metric LSCC', verticalalignment='center', horizontalalignment='left', color='k')
+    ax.text(1.01*width, 0.5*(1+L1+L2-L3), 'Semi-Metric WCC', verticalalignment='center', horizontalalignment='left', color='k')
+    
+    ax.set_title(title)
+    ax.set_xlim((0.0, 1.3*width))
+    #ax.set_ylim((-pad, 0.5+pad))
+    ax.set_axis_off()
+    
+    #plt.show()
+    plt.savefig(f'Figures/Components/{title}.png')
+    
+    
+def plot_s_dist(data, folder):
+    
+    import matplotlib.pyplot as plt
+    import powerlaw
+    import pandas as pd
+    
+    ss = pd.Series(list(data), name='s-value')
+
+    # Select only s-values
+    dfs = ss.loc[(ss > 1.0)].sort_values(ascending=False).to_frame()
+    xmin = dfs['s-value'].min()
+    xmin = 1
+    fit = powerlaw.Fit(dfs['s-value'], xmin=xmin, estimate_discrete=False)
+
+    alpha = fit.power_law.alpha
+    sigma = fit.power_law.sigma
+    print('Powerlaw: alpha:', alpha)
+    print('sigma:', sigma)
+
+    # Compare
+    R, p = fit.distribution_compare('power_law', 'lognormal_positive')
+    print("R:", R, 'p-value', p)
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+
+    fit.plot_pdf(color='#d62728', linewidth=2, label='Empirical data', ax=ax)
+
+    #
+    Rp = '$R = {R:.2f}$; $p = {p:.3f}$'.format(R=R, p=p)
+    ax.annotate(Rp, xy=(.03, .13), xycoords='axes fraction', color='black')
+
+    if R > 0:
+        pw_goodness = '$\sigma = {sigma:.3f}$'.format(sigma=fit.power_law.sigma)
+        ax.annotate(pw_goodness, xy=(.03, .05), xycoords='axes fraction', color='#1f77b4')
+    else:
+        ln_goodness = '$\mu = {mu:.2f}; \sigma = {sigma:.3f}$'.format(mu=fit.lognormal_positive.mu, sigma=fit.lognormal_positive.sigma)
+        ax.annotate(ln_goodness, xy=(.03, .05), xycoords='axes fraction', color='#2ca02c')
+    #
+    pw_label = r'Power law fit'
+    ln_label = r'Lognormal fit'
+
+    fit.power_law.plot_pdf(color='#aec7e8', linewidth=1, linestyle='--', label=pw_label, ax=ax)
+    fit.lognormal_positive.plot_pdf(color='#98df8a', linewidth=1, linestyle='--', label=ln_label, ax=ax)
+
+    #
+    ax.set_title(r'Semi-metric edges ($s_{{ij}}>1)$' '\n' '{source:s}'.format(source=folder))
+    ax.set_ylabel(r'$P(s_{ij} \geq x)$')
+    ax.set_xlabel(r'$s_{ij}$ frequency')
+
+    ax.grid()
+
+    ax.legend(loc='best')
+
+    plt.tight_layout()
+    # plt.subplots_adjust(left=0.09, right=0.98, bottom=0.07, top=0.90, wspace=0, hspace=0.0)
+    #plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
+    plt.savefig(f'{folder}.pdf', dpi=150, bbox_inches='tight')
+    #plt.show()
