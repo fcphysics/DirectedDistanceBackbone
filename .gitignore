@@ -12,9 +12,8 @@ networks/weblinks
 LOCAL/
 networks/example.py
 *old/
-sanity_checks.ipynb
+*.ipynb
 nohup.out
-undirect*
 Summary/
 
 # New stuff for now

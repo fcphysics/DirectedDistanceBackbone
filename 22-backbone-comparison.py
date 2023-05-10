@@ -47,8 +47,7 @@ if __name__ == '__main__':
     
     for idx, network in enumerate(networks):
         print(network)
-        settings = config[network]
-        folder = settings.get('folder')
+        folder = config[network].get('folder')
         
         dfM.loc[idx, 'name'] = network
         dfU.loc[idx, 'name'] = network

@@ -57,9 +57,9 @@ if __name__ == '__main__':
     G = pk.load(open(rGfile, 'rb'))
     
     # Dictionary of distortion distribution
-    distortion_dist = {'min': dict(), 'max': dict(), 'avg': dict()}
+    distortion_dist = {'min': dict(), 'max': dict(), 'avg': dict(), 'harm': dict()}
     
-    for type in ['min', 'max', 'avg']:
+    for type in ['min', 'max', 'avg', 'harm']:
         print(type)
                 #
         # Metric computation

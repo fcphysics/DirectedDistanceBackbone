@@ -49,27 +49,31 @@ if __name__ == '__main__':
     
     nx.set_edge_attributes(G, values=None, name='alpha')
     
-    U = {'min': nx.Graph(), 'max': nx.Graph(), 'avg': nx.Graph()}
+    U = {'min': nx.Graph(), 'max': nx.Graph(), 'avg': nx.Graph(), 'harm': nx.Graph()}
     for g in U.values():
         g.add_nodes_from(G.nodes())
     
     for u, v, w in G.edges(data=True):
         if w['alpha'] == None:
             G[u][v]['alpha'] = 0.0
-            pij = w['proximity']
+            din = G[u][v]['distance']
             if G.has_edge(v, u):
                 G[v][u]['alpha'] = 0.0
-                pji = G[v][u]['proximity']
-                pmin = min(pij, pji)
-                U['min'].add_edge(u, v, distance=prox2dist(pmin))
-            else:
-                pji = 0
+                dout = G[v][u]['distance']
+                
+                U['min'].add_edge(u, v, distance=min(din, dout))
+                U['max'].add_edge(u, v, distance=max(din, dout))
+                U['avg'].add_edge(u, v, distance=0.5*(din + dout))
+                
+                if (din + dout) == 0.0:
+                    U['harm'].add_edge(u, v, distance=0.0)
+                else:
+                    U['harm'].add_edge(u, v, distance=2*din*dout/(din + dout))
             
-            pmax = max(pij, pji)
-            pavg = 0.5*(pij+pji)        
-                    
-            U['max'].add_edge(u, v, distance=prox2dist(pmax))
-            U['avg'].add_edge(u, v, distance=prox2dist(pavg))
+            else:
+                U['min'].add_edge(u, v, distance=din)
+                U['harm'].add_edge(u, v, distance=2*din)
+            
 
     #nx.write_graphml(U, wGraphml)
     pk.dump(U, open(wGraphml, 'wb'))
