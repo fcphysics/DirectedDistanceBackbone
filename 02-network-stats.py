@@ -49,40 +49,55 @@ if __name__ == '__main__':
     G = nx.read_graphml(rGfile)
     
     # Calculate stats
-    n_nodes = G.number_of_nodes()
-    n_edges = G.number_of_edges()
+    wcc_nodes = G.number_of_nodes()
+    wcc_edges = G.number_of_edges()
 
     density = nx.density(G)
+    
+    LSCC = G.subgraph(max(nx.strongly_connected_components(G), key=len))
+    
+    lscc_nodes = LSCC.number_of_nodes()
+    lscc_edges = LSCC.number_of_edges()
         
     # Load backbone
-    # Metric
     G = nx.read_graphml(rBfile)
-    n_edges_metric = G.number_of_edges()
-
-    # New asymmetry dist
-    #alpha = dict()
-    #alpha['metric'] = get_asymmetry_distribution(G)
-    # Ultrametric
-    n_edges_ultrametric = sum([int(d) for _, _, d in G.edges(data='ultrametric')])
-    #alpha['ultrametric'] = get_asymmetry_distribution(G)
+    # Metric
+    tau_wcc_metric = G.number_of_edges()/wcc_edges
+    # Ultrametric AND LSCC
+    tau_wcc_ultrametric = 0 #sum([int(d) for _, _, d in G.edges(data='ultrametric')])/wcc_edges
+    tau_lscc_metric = 0
+    tau_lscc_ultrametric = 0
+    for u, v, ultra in G.edges(data='ultrametric'):
+        if LSCC.has_edge(u, v):
+            tau_lscc_metric += 1
+        if ultra:
+            tau_wcc_ultrametric += 1
+            if LSCC.has_edge(u, v):
+                tau_lscc_ultrametric += 1
+    
+    tau_wcc_ultrametric /= wcc_edges
+    if lscc_edges > 0.0:
+        tau_lscc_ultrametric /= lscc_edges
+        tau_lscc_metric /= lscc_edges
     
     # to Result Series
     sR = pd.Series({
-        'n-nodes': n_nodes,
-        'n-edges': n_edges,
+        'n-nodes': wcc_nodes,
+        'n-edges': wcc_edges,
         #
         'density': density,
         #
-        'n-edges-metric': n_edges_metric,
-        'n-edges-ultrametric': n_edges_ultrametric,
+        'LSCC-nodes': lscc_nodes,
+        'LSCC-edges': lscc_edges,
         #
-        '%-edges-metric': (n_edges_metric / n_edges),
-        '%-edges-ultrametric': (n_edges_ultrametric / n_edges),
+        'tau-metric': tau_wcc_metric,
+        'tau-ultrametric': tau_wcc_ultrametric,
         #
-        '%-redundancy-metric': 1 - (n_edges_metric / n_edges),
-        '%-redundancy-ultrametric': 1 - (n_edges_ultrametric / n_edges),
+        'LSCC-tau-metric': tau_lscc_metric,
+        'LSCC-tau-ultrametric': tau_lscc_ultrametric,
         #
-        '%-edges-ultrametric/metric': ((n_edges_ultrametric / n_edges) / (n_edges_metric / n_edges)),
+        'ultrametric_metric_ratio': (tau_wcc_ultrametric/tau_wcc_metric),
+        'LSCC-ultrametric_metric_ratio': (tau_lscc_ultrametric/tau_lscc_metric if tau_lscc_metric > 0 else 0),
         #
     }, name=network, dtype='object')
 
