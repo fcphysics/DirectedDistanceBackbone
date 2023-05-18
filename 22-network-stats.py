@@ -49,7 +49,7 @@ if __name__ == '__main__':
     G = pk.load(open(rGfile, 'rb'))
     B = pk.load(open(rBfile, 'rb'))
     
-    df = pd.DataFrame(columns=['n-nodes', 'n-edges', 'density', '%-edges-metric','%-edges-ultrametric'],
+    df = pd.DataFrame(columns=['n-nodes', 'n-edges', 'density', 'tau-edges-metric','tau-edges-ultrametric'],
                       index=['min', 'max', 'avg', 'harm'])
     
     for type in ['min', 'max', 'avg', 'harm']:
@@ -59,11 +59,11 @@ if __name__ == '__main__':
         df['density'][type] = nx.density(G[type])
         
         if df['n-edges'][type] > 0:
-            df['%-edges-metric'][type] = B[type].number_of_edges()/df['n-edges'][type]
-            df['%-edges-ultrametric'][type] = sum([int(d) for _, _, d in B[type].edges(data='ultrametric')])/df['n-edges'][type]
+            df['tau-edges-metric'][type] = B[type].number_of_edges()/df['n-edges'][type]
+            df['tau-edges-ultrametric'][type] = sum([int(d) for _, _, d in B[type].edges(data='ultrametric')])/df['n-edges'][type]
         else:
-            df['%-edges-metric'][type] = 0.0
-            df['%-edges-ultrametric'][type] = 0.0
+            df['tau-edges-metric'][type] = 0.0
+            df['tau-edges-ultrametric'][type] = 0.0
 
     # Print
     print(df)
