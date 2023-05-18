@@ -52,7 +52,8 @@ if __name__ == '__main__':
     df = pd.DataFrame(columns=['n-nodes', 'n-edges', 'density', 'tau-edges-metric','tau-edges-ultrametric'],
                       index=['min', 'max', 'avg', 'harm'])
     
-    for type in ['min', 'max', 'avg', 'harm']:
+    # Min and Harm can be done in entrie network
+    for type in ['min', 'harm']:
         print(type)
         df['n-nodes'][type] = G[type].number_of_nodes()
         df['n-edges'][type] = G[type].number_of_edges()
@@ -64,6 +65,27 @@ if __name__ == '__main__':
         else:
             df['tau-edges-metric'][type] = 0.0
             df['tau-edges-ultrametric'][type] = 0.0
+    
+    # Max and Avg Should be in a subset of the LSCC
+    rDfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
+    D = nx.read_graphml(rDfile)
+    lscc_nodes = max(nx.strongly_connected_components(D), key=len)
+    for type in ['max', 'avg']:
+        print(type)
+        g = G[type].subgraph(lscc_nodes)
+        
+        df['n-nodes'][type] = g.number_of_nodes()
+        df['n-edges'][type] = g.number_of_edges()
+        df['density'][type] = nx.density(g)
+        
+        if df['n-edges'][type] > 0:
+            b = B[type].subgraph(lscc_nodes)
+            df['tau-edges-metric'][type] = b.number_of_edges()/df['n-edges'][type]
+            df['tau-edges-ultrametric'][type] = sum([int(d) for _, _, d in b.edges(data='ultrametric')])/df['n-edges'][type]
+        else:
+            df['tau-edges-metric'][type] = 0.0
+            df['tau-edges-ultrametric'][type] = 0.0
+    
 
     # Print
     print(df)
