@@ -1,5 +1,1 @@
-,n-nodes,n-edges,density,tau-edges-metric,tau-edges-ultrametric
-min,10578,18529,0.00033121950969251893,0.6638242754600896,0.591451238598953
-max,1,0,0,0.0,0.0
-avg,1,0,0,0.0,0.0
-harm,10578,18529,0.00033121950969251893,0.6638242754600896,0.591451238598953
+,n-nodes,nd-edges,nu-edges,tau-metric,tau-ultrametric,tau-avg-metric,tau-avg-ultrametric,tau-max-metric,tau-max-ultrametric

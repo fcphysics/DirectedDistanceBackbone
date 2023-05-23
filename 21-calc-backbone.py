@@ -48,37 +48,41 @@ if __name__ == '__main__':
     weight_attr = settings.get('weight-attr')
    
     # Files
-    wGgraphml = 'networks/{folder:s}/undirected_backbones.pickle'.format(folder=folder)
+    rGfile = 'networks/{folder:s}/undirected_networks.pickle'.format(folder=folder)
     wFdistortion = 'networks/{folder:s}/undirected_distortions.pickle'.format(folder=folder)
+    wGstats = 'networks/{folder:s}/undirected_networks-stats.csv'.format(folder=folder)
 
     # Load Network
     print("Loading network: {network:s}".format(network=network))
-    rGfile = 'networks/{folder:s}/undirected_networks.pickle'.format(folder=folder)
-    G = pk.load(open(rGfile, 'rb'))
+    components = pk.load(open(rGfile, 'rb'))
     
-    # Dictionary of distortion distribution
-    distortion_dist = {'min': dict(), 'max': dict(), 'avg': dict(), 'harm': dict()}
     
-    for type in ['min', 'max', 'avg', 'harm']:
-        print(type)
-                #
-        # Metric computation
-        #
-        G[type], s_values = dc.backbone(G[type], weight='distance', kind='metric', distortion=True)
-        distortion_dist[type]['metric'] = s_values
-        #
-        # Ultrametric computation
-        #
-        U, s_values = dc.backbone(G[type], weight='distance', kind='ultrametric', distortion=True)
-        distortion_dist[type]['ultrametric'] = s_values
-        nx.set_edge_attributes(G[type], name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in G[type].edges()})
+    df = pd.DataFrame(columns=['n-nodes', 'nd-edges', 'nu-edges', 'tau-metric', 'tau-ultrametric', 
+                           'tau-avg-metric', 'tau-avg-ultrametric', 'tau-max-metric', 'tau-max-ultrametric'], index=range(len(components)))
+    
+    single_s = {'metric': dict(), 'ultrametric': dict(), 'avg-metric': dict(), 
+                             'avg-ultrametric': dict(), 'max-metric': dict(), 'max-ultrametric': dict()}
+    
+    s_values = [single_s.copy() for _ in range(len(components))]
+    
+    for idx, (D, U) in enumerate(components):
+        df['n-nodes'][idx] = D.number_of_nodes()
+        df['nd-edges'][idx] = D.number_of_edges()
+        df['nu-edges'][idx] = U.number_of_edges()
+        
+        for kind in ['metric', 'ultrametric']:
+            B, s_values[idx][kind] = dc.backbone(D, weight='distance', kind=kind, distortion=True)
+            df[f'tau-{kind}'][idx] = B.number_of_edges()/df['nd-edges'][idx]
+            for utype in ['avg', 'max']:
+                B, s_values[idx][f'{utype}-{kind}'] = dc.backbone(U, weight=f'{utype}_distance', kind=kind, distortion=True)
+                df[f'tau-{utype}-{kind}'][idx] = B.number_of_edges()/df['nu-edges'][idx]
             
+    
     print('--- Exporting Formats ---')
-    ensurePathExists(wGgraphml)
     ensurePathExists(wFdistortion)
 
-    print('> Backbone')
-    pk.dump(G, open(wGgraphml, 'wb'))
+    print('> Backbone Statistics')
+    df.to_csv(wGstats)
     print('> Distortion')
-    pk.dump(distortion_dist, open(wFdistortion, 'wb'))        
+    pk.dump(s_values, open(wFdistortion, 'wb'))        
     print('\n')

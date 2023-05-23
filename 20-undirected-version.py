@@ -47,36 +47,31 @@ if __name__ == '__main__':
     print("Loading network: {network:s}".format(network=network))
     G = nx.read_graphml(rGraphml)
     
+    # Select largest connected component
+    G = G.subgraph(max(nx.strongly_connected_components(G), key=len))
     nx.set_edge_attributes(G, values=None, name='alpha')
     
-    U = {'min': nx.Graph(), 'max': nx.Graph(), 'avg': nx.Graph(), 'harm': nx.Graph()}
-    for g in U.values():
-        g.add_nodes_from(G.nodes())
+    U = nx.Graph()
+    U.add_nodes_from(G.nodes())
     
     for u, v, w in G.edges(data=True):
         if w['alpha'] == None:
             G[u][v]['alpha'] = 0.0
-            din = G[u][v]['distance']
             if G.has_edge(v, u):
                 G[v][u]['alpha'] = 0.0
+                
+                din = G[u][v]['distance']
                 dout = G[v][u]['distance']
                 
-                U['min'].add_edge(u, v, distance=min(din, dout))
-                U['max'].add_edge(u, v, distance=max(din, dout))
-                U['avg'].add_edge(u, v, distance=0.5*(din + dout))
-                
-                if (din + dout) == 0.0:
-                    U['harm'].add_edge(u, v, distance=0.0)
-                else:
-                    U['harm'].add_edge(u, v, distance=2*din*dout/(din + dout))
-            
-            else:
-                U['min'].add_edge(u, v, distance=din)
-                U['harm'].add_edge(u, v, distance=2*din)
-            
+                U.add_edge(u, v, avg_distance=0.5*(din + dout), max_distance=max(din, dout))
+    
+    components = []
+    for c in nx.connected_components(U):
+        if len(c) > 2:
+            components.append((G.subgraph(c).copy(), U.subgraph(c).copy()))
 
     #nx.write_graphml(U, wGraphml)
-    pk.dump(U, open(wGraphml, 'wb'))
+    pk.dump(components, open(wGraphml, 'wb'))
     print("Done")
     
     
