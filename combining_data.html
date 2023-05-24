@@ -14667,36 +14667,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;n-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;ultrametric_metric_ratio&#39;</span><span class="p">,</span>
-<span class="s1">&#39;LSCC-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-ultrametric_metric_ratio&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">networks</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">network</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">)</span>
-    
-    <span class="n">rGstats</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s1">/network-stats.csv&#39;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">rGstats</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">network</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>    
-    <span class="c1">#break</span>
-
-<span class="c1">#print(df.head())</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Summary/BackboneStats.csv&#39;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14705,39 +14675,23 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Save to Latex</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">df = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;density&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, &#39;ultrametric_metric_ratio&#39;,</span>
+<span class="sd">&#39;LSCC-nodes&#39;, &#39;LSCC-edges&#39;, &#39;LSCC-tau-metric&#39;, &#39;LSCC-tau-ultrametric&#39;, &#39;LSCC-ultrametric_metric_ratio&#39;], index=networks)</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">Type</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;business-faculty&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;cs-faculty&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;history-faculty&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;caviar-proj&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;celegans-her&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;celegans-male&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;colombia-calls&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;colombia-mobility&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;mobility-manizales&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;mobility-medellin&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;tennis-loss&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;yeast-grn&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;bike-sharing&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;giraffe&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;comorbidity&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;phone-calls&#39;</span><span class="p">:</span> <span class="s1">&#39;Social&#39;</span><span class="p">,</span>
- <span class="s1">&#39;us-airports&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DDI&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;us-weblinks&#39;</span><span class="p">:</span> <span class="s1">&#39;Technological&#39;</span><span class="p">,</span>
- <span class="s1">&#39;host-pathogen&#39;</span><span class="p">:</span> <span class="s1">&#39;Biomedical&#39;</span><span class="p">}</span>
+<span class="sd">for network in networks:</span>
+<span class="sd">    folder = config[network].get(&#39;folder&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    rGstats = f&#39;networks/{folder}/network-stats.csv&#39;</span>
+<span class="sd">    data = pd.read_csv(rGstats, index_col=0)</span>
+<span class="sd">    </span>
+<span class="sd">    for col in df.columns:</span>
+<span class="sd">        df[col][network] = data[network][col]    </span>
+<span class="sd">    #break</span>
 
-<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">Type</span><span class="p">[</span><span class="n">network</span><span class="p">]</span>
-
-<span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Type&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;n-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;n-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;ultrametric_metric_ratio&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;LSCC-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;LSCC-ultrametric_metric_ratio&#39;</span><span class="p">]]</span>
-
-<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_latex</span><span class="p">(</span><span class="s1">&#39;Summary/BackboneStats.tex&#39;</span><span class="p">,</span> <span class="n">column_format</span><span class="o">=</span><span class="s1">&#39;l|l|rrr|c|c|c|rr|c|c|c|&#39;</span><span class="p">,</span> <span class="n">index_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="sd">#print(df.head())</span>
+<span class="sd">df.to_csv(&#39;Summary/BackboneStats.csv&#39;)</span>
+<span class="sd">&#39;&#39;&#39;</span>
 </pre></div>
 
      </div>
@@ -14751,16 +14705,89 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/tmp/ipykernel_2850493/2744205635.py:33: FutureWarning: In future versions `DataFrame.to_latex` is expected to utilise the base implementation of `Styler.to_latex` for formatting and rendering. The arguments signature may therefore change. It is recommended instead to use `DataFrame.style.to_latex` which also contains additional functionality.
-  df.sort_values(by=[&#39;Type&#39;]).to_latex(&#39;Summary/BackboneStats.tex&#39;, column_format=&#39;l|l|rrr|c|c|c|rr|c|c|c|&#39;, index_names=False)
-</pre>
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>&#34;\ndf = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;density&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, &#39;ultrametric_metric_ratio&#39;,\n&#39;LSCC-nodes&#39;, &#39;LSCC-edges&#39;, &#39;LSCC-tau-metric&#39;, &#39;LSCC-tau-ultrametric&#39;, &#39;LSCC-ultrametric_metric_ratio&#39;], index=networks)\n\nfor network in networks:\n    folder = config[network].get(&#39;folder&#39;)\n    \n    rGstats = f&#39;networks/{folder}/network-stats.csv&#39;\n    data = pd.read_csv(rGstats, index_col=0)\n    \n    for col in df.columns:\n        df[col][network] = data[network][col]    \n    #break\n\n#print(df.head())\ndf.to_csv(&#39;Summary/BackboneStats.csv&#39;)\n&#34;</pre>
 </div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Save to Latex</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">df[&#39;Type&#39;] = None</span>
+<span class="sd">Type = {&#39;business-faculty&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;cs-faculty&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;history-faculty&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;caviar-proj&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;celegans-her&#39;: &#39;Biomedical&#39;,</span>
+<span class="sd"> &#39;celegans-male&#39;: &#39;Biomedical&#39;,</span>
+<span class="sd"> &#39;colombia-calls&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;colombia-mobility&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;mobility-manizales&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;mobility-medellin&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;tennis-loss&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;yeast-grn&#39;: &#39;Biomedical&#39;,</span>
+<span class="sd"> &#39;bike-sharing&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;giraffe&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;comorbidity&#39;: &#39;Biomedical&#39;,</span>
+<span class="sd"> &#39;phone-calls&#39;: &#39;Social&#39;,</span>
+<span class="sd"> &#39;us-airports&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;DDI&#39;: &#39;Biomedical&#39;,</span>
+<span class="sd"> &#39;us-weblinks&#39;: &#39;Technological&#39;,</span>
+<span class="sd"> &#39;host-pathogen&#39;: &#39;Biomedical&#39;}</span>
+
+<span class="sd">for network in networks:</span>
+<span class="sd">    df[&#39;Type&#39;][network] = Type[network]</span>
+
+<span class="sd">df.reset_index(inplace=True)</span>
+
+<span class="sd">df = df[[&#39;Type&#39;, &#39;index&#39;, &#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;density&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, &#39;ultrametric_metric_ratio&#39;,</span>
+<span class="sd">         &#39;LSCC-nodes&#39;, &#39;LSCC-edges&#39;, &#39;LSCC-tau-metric&#39;, &#39;LSCC-tau-ultrametric&#39;, &#39;LSCC-ultrametric_metric_ratio&#39;]]</span>
+
+<span class="sd">df.sort_values(by=[&#39;Type&#39;]).to_latex(&#39;Summary/BackboneStats.tex&#39;, column_format=&#39;l|l|rrr|c|c|c|rr|c|c|c|&#39;, index_names=False)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>&#34;\ndf[&#39;Type&#39;] = None\nType = {&#39;business-faculty&#39;: &#39;Social&#39;,\n &#39;cs-faculty&#39;: &#39;Social&#39;,\n &#39;history-faculty&#39;: &#39;Social&#39;,\n &#39;caviar-proj&#39;: &#39;Social&#39;,\n &#39;celegans-her&#39;: &#39;Biomedical&#39;,\n &#39;celegans-male&#39;: &#39;Biomedical&#39;,\n &#39;colombia-calls&#39;: &#39;Social&#39;,\n &#39;colombia-mobility&#39;: &#39;Technological&#39;,\n &#39;mobility-manizales&#39;: &#39;Technological&#39;,\n &#39;mobility-medellin&#39;: &#39;Technological&#39;,\n &#39;tennis-loss&#39;: &#39;Social&#39;,\n &#39;yeast-grn&#39;: &#39;Biomedical&#39;,\n &#39;bike-sharing&#39;: &#39;Technological&#39;,\n &#39;giraffe&#39;: &#39;Social&#39;,\n &#39;comorbidity&#39;: &#39;Biomedical&#39;,\n &#39;phone-calls&#39;: &#39;Social&#39;,\n &#39;us-airports&#39;: &#39;Technological&#39;,\n &#39;DDI&#39;: &#39;Biomedical&#39;,\n &#39;us-weblinks&#39;: &#39;Technological&#39;,\n &#39;host-pathogen&#39;: &#39;Biomedical&#39;}\n\nfor network in networks:\n    df[&#39;Type&#39;][network] = Type[network]\n\ndf.reset_index(inplace=True)\n\ndf = df[[&#39;Type&#39;, &#39;index&#39;, &#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;density&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, &#39;ultrametric_metric_ratio&#39;,\n         &#39;LSCC-nodes&#39;, &#39;LSCC-edges&#39;, &#39;LSCC-tau-metric&#39;, &#39;LSCC-tau-ultrametric&#39;, &#39;LSCC-ultrametric_metric_ratio&#39;]]\n\ndf.sort_values(by=[&#39;Type&#39;]).to_latex(&#39;Summary/BackboneStats.tex&#39;, column_format=&#39;l|l|rrr|c|c|c|rr|c|c|c|&#39;, index_names=False)\n&#34;</pre>
+</div>
+
 </div>
 
 </div>
@@ -14778,7 +14805,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -14786,53 +14813,78 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_wcc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;n-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;n-min-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-min-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-harm-metric&#39;</span><span class="p">,</span>
-                           <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-min-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-harm-ultrametric&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">networks</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">df_wcc = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;n-min-edges&#39;, &#39;tau-metric&#39;, &#39;tau-min-metric&#39;, &#39;tau-harm-metric&#39;,</span>
+<span class="sd">                           &#39;tau-ultrametric&#39;, &#39;tau-min-ultrametric&#39;, &#39;tau-harm-ultrametric&#39;], index=networks)</span>
 
-<span class="n">df_lscc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;n-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;n-max-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-max-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-avg-metric&#39;</span><span class="p">,</span>
-                           <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-max-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-avg-ultrametric&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">networks</span><span class="p">)</span>
+<span class="sd">df_lscc = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;n-max-edges&#39;, &#39;tau-metric&#39;, &#39;tau-max-metric&#39;, &#39;tau-avg-metric&#39;,</span>
+<span class="sd">                           &#39;tau-ultrametric&#39;, &#39;tau-max-ultrametric&#39;, &#39;tau-avg-ultrametric&#39;], index=networks)</span>
 
-<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">network</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">)</span>
-    
-    <span class="n">rGstats</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s1">/undirected_networks-stats.csv&#39;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">rGstats</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    
-    <span class="n">df_wcc</span><span class="p">[</span><span class="s1">&#39;n-min-edges&#39;</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;n-edges&#39;</span><span class="p">][</span><span class="s1">&#39;min&#39;</span><span class="p">]</span>
-    <span class="n">df_lscc</span><span class="p">[</span><span class="s1">&#39;n-max-edges&#39;</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;n-edges&#39;</span><span class="p">][</span><span class="s1">&#39;max&#39;</span><span class="p">]</span>
-    
-    <span class="k">for</span> <span class="n">btype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;metric&#39;</span><span class="p">,</span> <span class="s1">&#39;ultrametric&#39;</span><span class="p">]:</span>
-        <span class="n">row_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tau-edges-</span><span class="si">{</span><span class="n">btype</span><span class="si">}</span><span class="s1">&#39;</span>
-        <span class="c1"># WCC Nets</span>
-        <span class="k">for</span> <span class="n">net_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;harm&#39;</span><span class="p">]:</span>
-            <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tau-</span><span class="si">{</span><span class="n">net_type</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">btype</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">df_wcc</span><span class="p">[</span><span class="n">col_name</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">row_name</span><span class="p">][</span><span class="n">net_type</span><span class="p">]</span>
-        <span class="c1"># LSCC Nets</span>
-        <span class="k">for</span> <span class="n">net_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">]:</span>
-            <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;tau-</span><span class="si">{</span><span class="n">net_type</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">btype</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">df_lscc</span><span class="p">[</span><span class="n">col_name</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">row_name</span><span class="p">][</span><span class="n">net_type</span><span class="p">]</span>
-            
-    
-    <span class="n">rGstats</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s1">/network-stats.csv&#39;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">rGstats</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    
-    <span class="n">correct</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;n-&#39;</span><span class="p">,</span> <span class="s1">&#39;n-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">meas</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;edges&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">]):</span>
-        <span class="n">wcc_meas</span> <span class="o">=</span> <span class="n">correct</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="n">meas</span>
-        <span class="n">df_wcc</span><span class="p">[</span><span class="n">wcc_meas</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">network</span><span class="p">][</span><span class="n">wcc_meas</span><span class="p">]</span>
-        <span class="n">lscc_meas</span> <span class="o">=</span> <span class="s1">&#39;LSCC-&#39;</span><span class="o">+</span><span class="n">meas</span>
-        <span class="n">df_lscc</span><span class="p">[</span><span class="n">wcc_meas</span><span class="p">][</span><span class="n">network</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">network</span><span class="p">][</span><span class="n">lscc_meas</span><span class="p">]</span>
-    
-<span class="c1">#print(df_wcc)</span>
-<span class="c1">#print(df_lscc)</span>
-<span class="n">df_wcc</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Summary/BackboneCompareStats_WCC.csv&#39;</span><span class="p">)</span>
-<span class="n">df_lscc</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;host-pathogen&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Remove SSI which does not have an LSCC</span>
-<span class="n">df_lscc</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Summary/BackboneCompareStats_LSCC.csv&#39;</span><span class="p">)</span>
+<span class="sd">for network in networks:</span>
+<span class="sd">    folder = config[network].get(&#39;folder&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    rGstats = f&#39;networks/{folder}/undirected_networks-stats.csv&#39;</span>
+<span class="sd">    data = pd.read_csv(rGstats, index_col=0)</span>
+<span class="sd">    </span>
+<span class="sd">    df_wcc[&#39;n-min-edges&#39;][network] = data[&#39;n-edges&#39;][&#39;min&#39;]</span>
+<span class="sd">    df_lscc[&#39;n-max-edges&#39;][network] = data[&#39;n-edges&#39;][&#39;max&#39;]</span>
+<span class="sd">    </span>
+<span class="sd">    for btype in [&#39;metric&#39;, &#39;ultrametric&#39;]:</span>
+<span class="sd">        row_name = f&#39;tau-edges-{btype}&#39;</span>
+<span class="sd">        # WCC Nets</span>
+<span class="sd">        for net_type in [&#39;min&#39;, &#39;harm&#39;]:</span>
+<span class="sd">            col_name = f&#39;tau-{net_type}-{btype}&#39;</span>
+<span class="sd">            df_wcc[col_name][network] = data[row_name][net_type]</span>
+<span class="sd">        # LSCC Nets</span>
+<span class="sd">        for net_type in [&#39;max&#39;, &#39;avg&#39;]:</span>
+<span class="sd">            col_name = f&#39;tau-{net_type}-{btype}&#39;</span>
+<span class="sd">            df_lscc[col_name][network] = data[row_name][net_type]</span>
+<span class="sd">            </span>
+<span class="sd">    </span>
+<span class="sd">    rGstats = f&#39;networks/{folder}/network-stats.csv&#39;</span>
+<span class="sd">    data = pd.read_csv(rGstats, index_col=0)</span>
+<span class="sd">    </span>
+<span class="sd">    correct = [&#39;n-&#39;, &#39;n-&#39;, &#39;&#39;, &#39;&#39;]</span>
+<span class="sd">    for idx, meas in enumerate([&#39;nodes&#39;, &#39;edges&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;]):</span>
+<span class="sd">        wcc_meas = correct[idx]+meas</span>
+<span class="sd">        df_wcc[wcc_meas][network] = data[network][wcc_meas]</span>
+<span class="sd">        lscc_meas = &#39;LSCC-&#39;+meas</span>
+<span class="sd">        df_lscc[wcc_meas][network] = data[network][lscc_meas]</span>
+<span class="sd">    </span>
+<span class="sd">#print(df_wcc)</span>
+<span class="sd">#print(df_lscc)</span>
+<span class="sd">df_wcc.to_csv(&#39;Summary/BackboneCompareStats_WCC.csv&#39;)</span>
+<span class="sd">df_lscc.drop(index=&#39;host-pathogen&#39;,axis=0,inplace=True) # Remove SSI which does not have an LSCC</span>
+<span class="sd">df_lscc.to_csv(&#39;Summary/BackboneCompareStats_LSCC.csv&#39;)</span>
+<span class="sd">&#39;&#39;&#39;</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>&#34;\ndf_wcc = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;n-min-edges&#39;, &#39;tau-metric&#39;, &#39;tau-min-metric&#39;, &#39;tau-harm-metric&#39;,\n                           &#39;tau-ultrametric&#39;, &#39;tau-min-ultrametric&#39;, &#39;tau-harm-ultrametric&#39;], index=networks)\n\ndf_lscc = pd.DataFrame(columns=[&#39;n-nodes&#39;, &#39;n-edges&#39;, &#39;n-max-edges&#39;, &#39;tau-metric&#39;, &#39;tau-max-metric&#39;, &#39;tau-avg-metric&#39;,\n                           &#39;tau-ultrametric&#39;, &#39;tau-max-ultrametric&#39;, &#39;tau-avg-ultrametric&#39;], index=networks)\n\nfor network in networks:\n    folder = config[network].get(&#39;folder&#39;)\n    \n    rGstats = f&#39;networks/{folder}/undirected_networks-stats.csv&#39;\n    data = pd.read_csv(rGstats, index_col=0)\n    \n    df_wcc[&#39;n-min-edges&#39;][network] = data[&#39;n-edges&#39;][&#39;min&#39;]\n    df_lscc[&#39;n-max-edges&#39;][network] = data[&#39;n-edges&#39;][&#39;max&#39;]\n    \n    for btype in [&#39;metric&#39;, &#39;ultrametric&#39;]:\n        row_name = f&#39;tau-edges-{btype}&#39;\n        # WCC Nets\n        for net_type in [&#39;min&#39;, &#39;harm&#39;]:\n            col_name = f&#39;tau-{net_type}-{btype}&#39;\n            df_wcc[col_name][network] = data[row_name][net_type]\n        # LSCC Nets\n        for net_type in [&#39;max&#39;, &#39;avg&#39;]:\n            col_name = f&#39;tau-{net_type}-{btype}&#39;\n            df_lscc[col_name][network] = data[row_name][net_type]\n            \n    \n    rGstats = f&#39;networks/{folder}/network-stats.csv&#39;\n    data = pd.read_csv(rGstats, index_col=0)\n    \n    correct = [&#39;n-&#39;, &#39;n-&#39;, &#39;&#39;, &#39;&#39;]\n    for idx, meas in enumerate([&#39;nodes&#39;, &#39;edges&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;]):\n        wcc_meas = correct[idx]+meas\n        df_wcc[wcc_meas][network] = data[network][wcc_meas]\n        lscc_meas = &#39;LSCC-&#39;+meas\n        df_lscc[wcc_meas][network] = data[network][lscc_meas]\n    \n#print(df_wcc)\n#print(df_lscc)\ndf_wcc.to_csv(&#39;Summary/BackboneCompareStats_WCC.csv&#39;)\ndf_lscc.drop(index=&#39;host-pathogen&#39;,axis=0,inplace=True) # Remove SSI which does not have an LSCC\ndf_lscc.to_csv(&#39;Summary/BackboneCompareStats_LSCC.csv&#39;)\n&#34;</pre>
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -15292,25 +15344,27 @@ This is only possible in a subset of the LSCC; thus we would expect that the siz
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">from collections import Counter</span>
 
-<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">network</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">)</span>
-    
-    <span class="n">rGfile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s1">/network.graphml&#39;</span>
-    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">read_graphml</span><span class="p">(</span><span class="n">rGfile</span><span class="p">)</span>
-    <span class="n">LSCC</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">strongly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span>
-    
-    <span class="n">rGnets</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s1">/undirected_networks.pickle&#39;</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">rGnets</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
-    
-    <span class="n">cc_sizes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">connected_components</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]):</span>
-        <span class="n">in_lscc</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">LSCC</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">c</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">in_lscc</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
-            <span class="n">cc_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-    
-    <span class="nb">print</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">Counter</span><span class="p">(</span><span class="n">cc_sizes</span><span class="p">))</span>
+<span class="sd">for network in networks:</span>
+<span class="sd">    folder = config[network].get(&#39;folder&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    rGfile = f&#39;networks/{folder}/network.graphml&#39;</span>
+<span class="sd">    G = nx.read_graphml(rGfile)</span>
+<span class="sd">    LSCC = G.subgraph(max(nx.strongly_connected_components(G), key=len))</span>
+<span class="sd">    </span>
+<span class="sd">    rGnets = f&#39;networks/{folder}/undirected_networks.pickle&#39;</span>
+<span class="sd">    U = pk.load(open(rGnets, &#39;rb&#39;))</span>
+<span class="sd">    </span>
+<span class="sd">    cc_sizes = []</span>
+<span class="sd">    for c in nx.connected_components(U[&#39;max&#39;]):</span>
+<span class="sd">        in_lscc = sum([int(LSCC.has_node(n)) for n in c])</span>
+<span class="sd">        if in_lscc == len(c):</span>
+<span class="sd">            cc_sizes.append(len(c))</span>
+<span class="sd">    </span>
+<span class="sd">    print(network, Counter(cc_sizes))</span>
+<span class="sd">&#39;&#39;&#39;</span>
 </pre></div>
 
      </div>
@@ -15324,34 +15378,17 @@ This is only possible in a subset of the LSCC; thus we would expect that the siz
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>business-faculty Counter({1: 10, 84: 1})
-cs-faculty Counter({1: 75, 3: 2, 2: 2, 78: 1, 4: 1})
-history-faculty Counter({1: 52, 2: 4, 56: 1})
-caviar-proj Counter({1: 3, 63: 1})
-celegans-her Counter({1: 18, 2: 3, 3: 2, 215: 1, 4: 1})
-celegans-male Counter({1: 37, 2: 4, 3: 2, 238: 1})
-colombia-calls Counter({863: 1})
-colombia-mobility Counter({863: 1})
-mobility-manizales Counter({57: 1})
-mobility-medellin Counter({413: 1})
-tennis-loss Counter({1: 1159, 2: 3, 1263: 1})
-yeast-grn Counter({1: 4, 1225: 1})
-bike-sharing Counter({723: 1})
-giraffe Counter({6: 1})
-comorbidity Counter({95: 1})
-phone-calls Counter({1: 15, 2: 3, 30: 1, 24: 1, 4: 1, 6: 1, 9: 1, 8: 1, 5: 1, 7: 1})
-us-airports Counter({1: 65, 2: 2, 926: 1})
-DDI Counter({412: 1})
-us-weblinks Counter({1: 6744, 2: 440, 3: 94, 4: 51, 5: 14, 6: 13, 8: 10, 7: 6, 12: 4, 10: 4, 9: 3, 30: 2, 13: 2, 18112: 1, 273: 1, 31: 1, 21: 1, 262: 1, 88: 1, 278: 1, 18: 1, 19: 1, 14: 1, 17: 1, 11: 1})
-host-pathogen Counter({1: 1})
-</pre>
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>&#34;\nfrom collections import Counter\n\nfor network in networks:\n    folder = config[network].get(&#39;folder&#39;)\n    \n    rGfile = f&#39;networks/{folder}/network.graphml&#39;\n    G = nx.read_graphml(rGfile)\n    LSCC = G.subgraph(max(nx.strongly_connected_components(G), key=len))\n    \n    rGnets = f&#39;networks/{folder}/undirected_networks.pickle&#39;\n    U = pk.load(open(rGnets, &#39;rb&#39;))\n    \n    cc_sizes = []\n    for c in nx.connected_components(U[&#39;max&#39;]):\n        in_lscc = sum([int(LSCC.has_node(n)) for n in c])\n        if in_lscc == len(c):\n            cc_sizes.append(len(c))\n    \n    print(network, Counter(cc_sizes))\n&#34;</pre>
 </div>
+
 </div>
 
 </div>
@@ -15451,18 +15488,20 @@ class="
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n-nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;nd-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;nu-edges&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-ultrametric&#39;</span><span class="p">,</span> 
-                           <span class="s1">&#39;tau-avg-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-avg-ultrametric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-max-metric&#39;</span><span class="p">,</span> <span class="s1">&#39;tau-max-ultrametric&#39;</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">df = pd.DataFrame(index=[&#39;n-nodes&#39;, &#39;nd-edges&#39;, &#39;nu-edges&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, </span>
+<span class="sd">                           &#39;tau-avg-metric&#39;, &#39;tau-avg-ultrametric&#39;, &#39;tau-max-metric&#39;, &#39;tau-max-ultrametric&#39;])</span>
 
-<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">network</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;networks/</span><span class="si">{</span><span class="n">folder</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">/undirected_networks-stats.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-    
-    <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
-            <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">network</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
-    
-<span class="n">df</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Summary/BackboneCompareStats_Components.csv&#39;</span><span class="p">)</span>
+<span class="sd">for network in networks:</span>
+<span class="sd">    folder = config[network].get(&#39;folder&#39;)</span>
+<span class="sd">    data = pd.read_csv(f&#39;networks/{folder:s}/undirected_networks-stats.csv&#39;, index_col=0).T</span>
+<span class="sd">    </span>
+<span class="sd">    for id in data.columns:</span>
+<span class="sd">        if data[id].min() &lt; 1.0:</span>
+<span class="sd">            df[f&#39;{network}-{id}&#39;] = data[id]</span>
+<span class="sd">    </span>
+<span class="sd">df.T.to_csv(&#39;Summary/BackboneCompareStats_Components.csv&#39;)</span>
+<span class="sd">&#39;&#39;&#39;</span>
 </pre></div>
 
      </div>
@@ -15476,108 +15515,17 @@ class="
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-/tmp/ipykernel_2850493/1353717204.py:10: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
-  df[f&#39;{network}-{id}&#39;] = data[id]
-</pre>
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>&#34;\ndf = pd.DataFrame(index=[&#39;n-nodes&#39;, &#39;nd-edges&#39;, &#39;nu-edges&#39;, &#39;tau-metric&#39;, &#39;tau-ultrametric&#39;, \n                           &#39;tau-avg-metric&#39;, &#39;tau-avg-ultrametric&#39;, &#39;tau-max-metric&#39;, &#39;tau-max-ultrametric&#39;])\n\nfor network in networks:\n    folder = config[network].get(&#39;folder&#39;)\n    data = pd.read_csv(f&#39;networks/{folder:s}/undirected_networks-stats.csv&#39;, index_col=0).T\n    \n    for id in data.columns:\n        if data[id].min() &lt; 1.0:\n            df[f&#39;{network}-{id}&#39;] = data[id]\n    \ndf.T.to_csv(&#39;Summary/BackboneCompareStats_Components.csv&#39;)\n&#34;</pre>
 </div>
+
 </div>
 
 </div>
@@ -15804,6 +15752,202 @@ class="
 class="
 "
 >
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="How-much-this-LSCC-captures-the-WCC?">How much this LSCC captures the WCC?<a class="anchor-link" href="#How-much-this-LSCC-captures-the-WCC?">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Summary/CompareSize_LSCC_WCC.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>N_WCC</th>
+      <th>N_LSCC</th>
+      <th>Percent</th>
+    </tr>
+    <tr>
+      <th>Network</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>bike-sharing</th>
+      <td>725</td>
+      <td>723</td>
+      <td>0.997241</td>
+    </tr>
+    <tr>
+      <th>business-faculty</th>
+      <td>113</td>
+      <td>84</td>
+      <td>0.743363</td>
+    </tr>
+    <tr>
+      <th>caviar-proj</th>
+      <td>110</td>
+      <td>63</td>
+      <td>0.572727</td>
+    </tr>
+    <tr>
+      <th>celegans-her</th>
+      <td>313</td>
+      <td>215</td>
+      <td>0.686901</td>
+    </tr>
+    <tr>
+      <th>celegans-male</th>
+      <td>328</td>
+      <td>238</td>
+      <td>0.725610</td>
+    </tr>
+    <tr>
+      <th>colombia-calls</th>
+      <td>863</td>
+      <td>863</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>colombia-mobility</th>
+      <td>863</td>
+      <td>863</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>comorbidity</th>
+      <td>95</td>
+      <td>95</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>cs-faculty</th>
+      <td>206</td>
+      <td>78</td>
+      <td>0.378641</td>
+    </tr>
+    <tr>
+      <th>DDI</th>
+      <td>412</td>
+      <td>412</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>giraffe</th>
+      <td>6</td>
+      <td>6</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>history-faculty</th>
+      <td>145</td>
+      <td>56</td>
+      <td>0.386207</td>
+    </tr>
+    <tr>
+      <th>mobility-manizales</th>
+      <td>57</td>
+      <td>57</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>mobility-medellin</th>
+      <td>413</td>
+      <td>413</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>phone-calls</th>
+      <td>322</td>
+      <td>30</td>
+      <td>0.093168</td>
+    </tr>
+    <tr>
+      <th>tennis-loss</th>
+      <td>4245</td>
+      <td>1263</td>
+      <td>0.297527</td>
+    </tr>
+    <tr>
+      <th>us-airports</th>
+      <td>1075</td>
+      <td>926</td>
+      <td>0.861395</td>
+    </tr>
+    <tr>
+      <th>us-weblinks</th>
+      <td>42800</td>
+      <td>18112</td>
+      <td>0.423178</td>
+    </tr>
+    <tr>
+      <th>yeast-grn</th>
+      <td>6216</td>
+      <td>1225</td>
+      <td>0.197072</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
