@@ -1,11 +1,7 @@
 ,business-faculty
-n-nodes,113
-n-edges,3432
+n_nodes,113
+n_edges,3432
 density,0.27117572692793934
-n-edges-metric,1565
-n-edges-ultrametric,638
-%-edges-metric,0.456002331002331
-%-edges-ultrametric,0.1858974358974359
-%-redundancy-metric,0.543997668997669
-%-redundancy-ultrametric,0.8141025641025641
-%-edges-ultrametric/metric,0.40766773162939296
+tau_metric,0.3508158508158508
+tau_ultrametric,0.09761072261072261
+ultra_per_metric,0.2782392026578073

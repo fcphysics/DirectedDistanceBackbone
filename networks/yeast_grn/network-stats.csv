@@ -1,11 +1,7 @@
 ,yeast-grn
-n-nodes,6216
-n-edges,1666106
+n_nodes,6216
+n_edges,1666106
 density,0.04312712321561879
-n-edges-metric,106160
-n-edges-ultrametric,22963
-%-edges-metric,0.06371743454498092
-%-edges-ultrametric,0.013782436411608865
-%-redundancy-metric,0.9362825654550191
-%-redundancy-ultrametric,0.9862175635883912
-%-edges-ultrametric/metric,0.21630557648831955
+tau_metric,0.06371743454498092
+tau_ultrametric,0.013782436411608865
+ultra_per_metric,0.21630557648831952

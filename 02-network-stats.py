@@ -43,7 +43,7 @@ if __name__ == '__main__':
     rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
     rBfile = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
     wGstats = 'networks/{folder:s}/network-stats.csv'.format(folder=folder)
-    wFasymmetry = 'networks/{folder:s}/backbone_asymmetry.pickle'.format(folder=folder)
+    #wFasymmetry = 'networks/{folder:s}/backbone_asymmetry.pickle'.format(folder=folder)
 
     # Load graph
     G = nx.read_graphml(rGfile)
@@ -60,37 +60,38 @@ if __name__ == '__main__':
     n_edges_metric = G.number_of_edges()
 
     # New asymmetry dist
-    alpha = dict()
-    alpha['metric'] = get_asymmetry_distribution(G)
+    #alpha = dict()
+    #alpha['metric'] = get_asymmetry_distribution(G)
     # Ultrametric
-    edges2remove = [(i, j) for i, j, d in G.edges(data=True) if 'ultrametric' not in d]
-    G.remove_edges_from(edges2remove)
-    n_edges_ultrametric = G.number_of_edges()
-    alpha['ultrametric'] = get_asymmetry_distribution(G)
+    #edges2remove = [(i, j) for i, j, d in G.edges(data=True) if 'ultrametric' not in d]
+    #G.remove_edges_from(edges2remove)
+    #n_edges_ultrametric = G.number_of_edges()
+    n_edges_ultrametric = sum([int(w) for _, _, w in G.edges(data='ultrametric')])
+    #alpha['ultrametric'] = get_asymmetry_distribution(G)
     
     # to Result Series
     sR = pd.Series({
-        'n-nodes': n_nodes,
-        'n-edges': n_edges,
+        'n_nodes': n_nodes,
+        'n_edges': n_edges,
         #
         'density': density,
         #
-        'n-edges-metric': n_edges_metric,
-        'n-edges-ultrametric': n_edges_ultrametric,
+        #'n-edges-metric': n_edges_metric,
+        #'n-edges-ultrametric': n_edges_ultrametric,
         #
-        '%-edges-metric': (n_edges_metric / n_edges),
-        '%-edges-ultrametric': (n_edges_ultrametric / n_edges),
+        'tau_metric': (n_edges_metric / n_edges),
+        'tau_ultrametric': (n_edges_ultrametric / n_edges),
         #
-        '%-redundancy-metric': 1 - (n_edges_metric / n_edges),
-        '%-redundancy-ultrametric': 1 - (n_edges_ultrametric / n_edges),
+        #'%-redundancy-metric': 1 - (n_edges_metric / n_edges),
+        #'%-redundancy-ultrametric': 1 - (n_edges_ultrametric / n_edges),
         #
-        '%-edges-ultrametric/metric': ((n_edges_ultrametric / n_edges) / (n_edges_metric / n_edges)),
+        'ultra_per_metric': (n_edges_ultrametric / n_edges_metric),
         #
     }, name=network, dtype='object')
 
     # Print
     print(sR)
     sR.to_csv(wGstats)
-    print('> Asymmetry')
-    pk.dump(alpha, open(wFasymmetry, 'wb'))
+    #print('> Asymmetry')
+    #pk.dump(alpha, open(wFasymmetry, 'wb'))
     print("\n\n")

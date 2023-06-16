@@ -48,37 +48,53 @@ if __name__ == '__main__':
     weight_attr = settings.get('weight-attr')
    
     # Files
-    wGgraphml = 'networks/{folder:s}/undirected_backbones.pickle'.format(folder=folder)
+    rGraphml = ['networks/{folder:s}/undirected_wcc_network.graphml'.format(folder=folder),
+                'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
+                'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)]
     wFdistortion = 'networks/{folder:s}/undirected_distortions.pickle'.format(folder=folder)
+    wGraphml = 'networks/{folder:s}/undirected_{type:s}_backbone.graphml'
 
+    # Dictionary of distortion distribution
+    distortion_dist = {'min': dict(), 'max': dict(), 'avg': dict(), 'harm': dict()}
+    
     # Load Network
     print("Loading network: {network:s}".format(network=network))
-    rGfile = 'networks/{folder:s}/undirected_networks.pickle'.format(folder=folder)
-    G = pk.load(open(rGfile, 'rb'))
     
-    # Dictionary of distortion distribution
-    distortion_dist = {'min': dict(), 'max': dict(), 'avg': dict()}
+    types = [['min', 'harm'], ['max', 'avg']]
     
-    for type in ['min', 'max', 'avg']:
-        print(type)
-                #
-        # Metric computation
-        #
-        G[type], s_values = dc.backbone(G[type], weight='distance', kind='metric', distortion=True)
-        distortion_dist[type]['metric'] = s_values
-        #
-        # Ultrametric computation
-        #
-        U, s_values = dc.backbone(G[type], weight='distance', kind='ultrametric', distortion=True)
-        distortion_dist[type]['ultrametric'] = s_values
-        nx.set_edge_attributes(G[type], name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in G[type].edges()})
+    for i in range(2):
+        G = nx.read_graphml(rGraphml[i])
+        for type in types[i]:
+            # Metric computation
+            B, s_values = dc.backbone(G, weight=f'{type}_distance', kind='metric', distortion=True)
+            distortion_dist[type]['metric'] = s_values
             
-    print('--- Exporting Formats ---')
-    ensurePathExists(wGgraphml)
-    ensurePathExists(wFdistortion)
+            # Ultrametric computation
+            U, s_values = dc.backbone(B, weight=f'{type}_distance', kind='ultrametric', distortion=True)
+            distortion_dist[type]['ultrametric'] = s_values
+            
+            nx.set_edge_attributes(B, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in B.edges()})
+            
+            print(f'> {type} Backbone')
+            nx.write_graphml(B, wGraphml.format(folder=folder, type=type))        
 
-    print('> Backbone')
-    pk.dump(G, open(wGgraphml, 'wb'))
     print('> Distortion')
     pk.dump(distortion_dist, open(wFdistortion, 'wb'))        
+    print('\n')
+    
+    distortion_dist = dict()
+    
+    G = nx.read_graphml(rGraphml[2])
+    # Metric computation
+    B, distortion_dist['metric'] = dc.backbone(G, weight='distance', kind='metric', distortion=True)
+    
+    # Ultrametric computation
+    U, distortion_dist['ultrametric'] = dc.backbone(B, weight='distance', kind='ultrametric', distortion=True)
+    
+    nx.set_edge_attributes(B, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in B.edges()})
+    
+    print(f'> MLSCC Backbone')
+    nx.write_graphml(B, f'networks/{folder}/mlscc_backbone.graphml')
+    print('> Distortion')
+    pk.dump(distortion_dist, open(f'networks/{folder}/mlscc_distortion.pickle', 'wb'))        
     print('\n')

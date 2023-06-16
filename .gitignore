@@ -10,6 +10,7 @@ networks/weblinks
 
 # Do not upload local files
 LOCAL/
+Figures/
 networks/example.py
 *old/
 sanity_checks.ipynb
