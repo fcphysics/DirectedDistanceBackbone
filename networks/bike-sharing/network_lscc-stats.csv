@@ -1,0 +1,7 @@
+,bike-sharing
+n_nodes,723
+n_edges,53115
+density,0.10175170400340226
+tau_metric,0.5952932316671373
+tau_ultrametric,0.027487527063917914
+ultra_per_metric,0.046174768335494484

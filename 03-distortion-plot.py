@@ -54,6 +54,7 @@ def plot_s_dist(folder, kind='metric', date=None):
 
     # Compare
     R, p = fit.distribution_compare('power_law', 'lognormal_positive')
+    #R, p = fit.distribution_compare('power_law', 'lognormal')
     print("R:", R, 'p-value', p)
 
     fig, ax = plt.subplots(figsize=(5, 4))
@@ -69,6 +70,7 @@ def plot_s_dist(folder, kind='metric', date=None):
         ax.annotate(pw_goodness, xy=(.03, .05), xycoords='axes fraction', color='#1f77b4')
     else:
         ln_goodness = '$\mu = {mu:.2f}; \sigma = {sigma:.3f}$'.format(mu=fit.lognormal_positive.mu, sigma=fit.lognormal_positive.sigma)
+        #ln_goodness = '$\mu = {mu:.2f}; \sigma = {sigma:.3f}$'.format(mu=fit.lognormal.mu, sigma=fit.lognormal.sigma)
         ax.annotate(ln_goodness, xy=(.03, .05), xycoords='axes fraction', color='#2ca02c')
     #
     pw_label = r'Power law fit'
@@ -78,7 +80,7 @@ def plot_s_dist(folder, kind='metric', date=None):
     fit.lognormal_positive.plot_pdf(color='#98df8a', linewidth=1, linestyle='--', label=ln_label, ax=ax)
 
     #
-    ax.set_title(r'Semi-metric edges ($s_{{ij}}>1)$' '\n' '{source:s}'.format(source=folder))
+    ax.set_title(r'Semi-{kind:s} edges ($s_{{ij}}>1)$'.format(kind=kind) +'\n'+ '{source:s}'.format(source=folder))
     ax.set_ylabel(r'$P(s_{ij} \geq x)$')
     ax.set_xlabel(r'$s_{ij}$ frequency')
 
@@ -87,9 +89,9 @@ def plot_s_dist(folder, kind='metric', date=None):
     ax.legend(loc='best')
 
     plt.tight_layout()
-    # plt.subplots_adjust(left=0.09, right=0.98, bottom=0.07, top=0.90, wspace=0, hspace=0.0)
-    #plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
-    plt.savefig('bike_trips.pdf', dpi=150, bbox_inches='tight')
+    #plt.subplots_adjust(left=0.09, right=0.98, bottom=0.07, top=0.90, wspace=0, hspace=0.0)
+    plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
+    #plt.savefig('bike_trips.pdf', dpi=150, bbox_inches='tight')
 
 
 if __name__ == '__main__':
@@ -115,4 +117,4 @@ if __name__ == '__main__':
 
     # Plot Distortion Distribution
     plot_s_dist(folder, kind='metric')
-    #plot_s_dist(folder, kind='ultrametric')
+    plot_s_dist(folder, kind='ultrametric')

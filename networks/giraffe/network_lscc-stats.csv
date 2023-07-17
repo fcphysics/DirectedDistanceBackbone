@@ -1,0 +1,7 @@
+,giraffe
+n_nodes,6
+n_edges,30
+density,1.0
+tau_metric,0.7666666666666667
+tau_ultrametric,0.3333333333333333
+ultra_per_metric,0.43478260869565216
