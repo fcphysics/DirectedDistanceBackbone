@@ -6,7 +6,7 @@ networks/DDI
 # Not used in the manuscript
 networks/online_dating
 networks/pop-flow
-networks/weblinks
+#networks/weblinks
 
 # Do not upload local files
 LOCAL/
