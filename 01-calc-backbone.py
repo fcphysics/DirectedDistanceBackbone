@@ -60,25 +60,25 @@ if __name__ == '__main__':
 
     # Load graph
     print("Loading network: {network:s}".format(network=network))
-    G = nx.read_graphml(rGfile)
+    Go = nx.read_graphml(rGfile)
     
     #
     # Asymmetry distribution
     #
-    alpha = get_asymmetry_distribution(G)
+    alpha = get_asymmetry_distribution(Go)
     
     # Dictionary of distortion distribution
     distortion_dist = dict()
     #
     # Metric computation
     #
-    G, s_values = dc.backbone(G, weight='distance', kind='metric', distortion=True)
+    G, s_values = dc.backbone(Go, weight='distance', kind='metric', distortion=True)
     distortion_dist['metric'] = s_values
     nx.set_edge_attributes(G, name='metric', values=True)
     #
     # Ultrametric computation
     #
-    U, s_values = dc.backbone(G, weight='distance', kind='ultrametric', distortion=True)
+    U, s_values = dc.backbone(Go, weight='distance', kind='ultrametric', distortion=True)
     distortion_dist['ultrametric'] = s_values
     nx.set_edge_attributes(G, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in G.edges()})
         
