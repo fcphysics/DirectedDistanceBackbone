@@ -57,8 +57,8 @@ def plot_s_dist(folder, kind='metric', date=None):
 
     if R > 0:
         print('Powerlaw: alpha:', fit.power_law.alpha)
-        print('sigma:', fit.power_law.sigma)
-        pw_goodness = '$\sigma = {sigma:.3f}$'.format(sigma=fit.power_law.sigma)
+        print('gamma:', fit.power_law.sigma)
+        pw_goodness = '$\gamma = {sigma:.3f}$'.format(sigma=fit.power_law.sigma)
         ax.annotate(pw_goodness, xy=(.03, .05), xycoords='axes fraction', color='#1f77b4')
     else:
         print('LogNormal: mu:', fit.lognormal_positive.mu)

@@ -62,12 +62,16 @@ if __name__ == '__main__':
     
     # Load Network
     print("Loading network: {network:s}".format(network=network))
-    rGfile = 'networks/{folder:s}/network.gpickle'.format(folder=folder)
 
     # Load graph (networkx 1.x)
     # G = nx.read_gpickle(rGfile)
     # Load graph (networkx 2.0+)
-    G = read_gpickle(rGfile)
+    try:
+        rGfile = 'networks/{folder:s}/network.gpickle'.format(folder=folder)
+        G = read_gpickle(rGfile)
+    except:
+        rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder)
+        G = nx.read_graphml(rGfile)
 
     # Remove self-loops
     print('Remove self-loops')
@@ -77,19 +81,20 @@ if __name__ == '__main__':
     print('Keep largest connected component')
     G = G.subgraph(max(nx.weakly_connected_components(G), key=len)).copy()
 
-    if weight_type in 'proximity':
+    if weight_type == 'proximity':
 
         print('Prox -> Dist')
         P_dict = nx.get_edge_attributes(G, weight_attr)
         D_dict = {key: prox2dist(value) for key, value in P_dict.items()}
-        nx.set_edge_attributes(G, name='distance', values=D_dict)
+        #nx.set_edge_attributes(G, name='distance', values=D_dict)
 
     if weight_type == 'distance':
 
+        print('Prox -> Dist')
         D_dict = nx.get_edge_attributes(G, name=weight_attr)
         P_dict = {key: dist2prox(value) for key, value in D_dict.items()}
     
-
+    print(P_dict)
     if (min(P_dict.values()) < 0) or (max(P_dict.values()) > 1.0):
         raise TypeError("Proximity values not in [0,1]")
     if min(D_dict.values()) < 0:
