@@ -3,16 +3,16 @@
 
 # Networks to ignore
 networks/DDI
+networks/weblinks_us
 # Not used in the manuscript
 networks/online_dating
 networks/pop-flow
-#networks/weblinks
 
 # Do not upload local files
 LOCAL/
 Figures/
 networks/example.py
-*old/
+old*
 sanity_checks.ipynb
 nohup.out
 undirect*

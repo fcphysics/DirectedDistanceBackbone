@@ -70,7 +70,7 @@ if __name__ == '__main__':
             distortion_dist[type]['metric'] = s_values
             
             # Ultrametric computation
-            U, s_values = dc.backbone(B, weight=f'{type}_distance', kind='ultrametric', distortion=True)
+            U, s_values = dc.backbone(G, weight=f'{type}_distance', kind='ultrametric', distortion=True)
             distortion_dist[type]['ultrametric'] = s_values
             
             nx.set_edge_attributes(B, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in B.edges()})
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     B, distortion_dist['metric'] = dc.backbone(G, weight='distance', kind='metric', distortion=True)
     
     # Ultrametric computation
-    U, distortion_dist['ultrametric'] = dc.backbone(B, weight='distance', kind='ultrametric', distortion=True)
+    U, distortion_dist['ultrametric'] = dc.backbone(G, weight='distance', kind='ultrametric', distortion=True)
     
     nx.set_edge_attributes(B, name='ultrametric', values={(u, v): U.has_edge(u, v) for u, v in B.edges()})
     

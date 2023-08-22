@@ -38,9 +38,10 @@ def plot_s_dist(folder, kind):
     data = pk.load(open(rDistFile, 'rb'))
     
     summary = pd.DataFrame({'R': {'min': 0, 'max': 0, 'avg': 0}, 'p': {'min': 0, 'max': 0, 'avg': 0}, 
-                       'alpha': {'min': 0, 'max': 0, 'avg': 0}, 'sigma': {'min': 0, 'max': 0, 'avg': 0},
-                       'mu': {'min': 0, 'max': 0, 'avg': 0}, 'mean': {'min': 0, 'max': 0, 'avg': 0},
-                       'median': {'min': 0, 'max': 0, 'avg': 0}, 'stdev': {'min': 0, 'max': 0, 'avg': 0}})
+                       'alpha': {'min': 0, 'max': 0, 'avg': 0}, 'gamma': {'min': 0, 'max': 0, 'avg': 0},
+                       'mu': {'min': 0, 'max': 0, 'avg': 0}, 'sigma': {'min': 0, 'max': 0, 'avg': 0},
+                       'mean': {'min': 0, 'max': 0, 'avg': 0}, 'median': {'min': 0, 'max': 0, 'avg': 0},
+                       'stdev': {'min': 0, 'max': 0, 'avg': 0}})
     
     for type in ['min', 'max', 'avg']:
         ss = pd.Series(list(data[type][kind].values()), name='s-value')
@@ -53,11 +54,12 @@ def plot_s_dist(folder, kind):
         dfs = ss.loc[(ss > 1.0)].sort_values(ascending=False).to_frame()
         xmin = 1
         fit = powerlaw.Fit(dfs['s-value'], xmin=xmin, estimate_discrete=False)
-        summary['R'][type], summary['p'][type] = fit.distribution_compare('power_law', 'lognormal') # Compare
+        summary['R'][type], summary['p'][type] = fit.distribution_compare('power_law', 'lognormal_positive') # Compare
         # Parameters
         summary['alpha'][type] = fit.power_law.alpha
-        summary['sigma'][type] = fit.power_law.sigma
-        summary['mu'][type] = fit.lognormal.mu
+        summary['gamma'][type] = fit.power_law.sigma
+        summary['mu'][type] = fit.lognormal_positive.mu
+        summary['sigma'][type] = fit.lognormal_positive.sigma
     
     summary.to_csv(wSummaryFile)
     
