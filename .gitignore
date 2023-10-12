@@ -15,7 +15,7 @@ networks/example.py
 old*
 sanity_checks.ipynb
 nohup.out
-undirect*
+#undirect*
 Summary/
 
 # New stuff for now
