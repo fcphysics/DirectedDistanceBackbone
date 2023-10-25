@@ -27,8 +27,8 @@ script*
 # Do not upload large graph files
 *.gpickle
 #.graphml
-network.graphml
-backbone.graphml
+*network.graphml
+*backbone.graphml
 *.pickle
 # Nor distortion plots
 *.pdf
