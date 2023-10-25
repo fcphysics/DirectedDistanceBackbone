@@ -15,7 +15,7 @@ networks/example.py
 old*
 sanity_checks.ipynb
 nohup.out
-#undirect*
+undirect*
 Summary/
 
 # New stuff for now
@@ -26,7 +26,9 @@ script*
 
 # Do not upload large graph files
 *.gpickle
-*.graphml
+#.graphml
+network.graphml
+backbone.graphml
 *.pickle
 # Nor distortion plots
 *.pdf
