@@ -18,6 +18,10 @@ nohup.out
 undirect*
 Summary/
 
+_shortest_path.py
+test.py
+caviar_subnet.graphml
+
 # New stuff for now
 new_networks/
 

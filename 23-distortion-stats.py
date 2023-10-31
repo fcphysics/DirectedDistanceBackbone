@@ -32,17 +32,34 @@ import pickle as pk
 
 def plot_s_dist(folder, kind):
     
-    rDistFile = 'networks/{folder:s}/undirected_distortions.pickle'.format(folder=folder)
-    wSummaryFile = 'networks/{folder:s}/undirected_{kind}_distortion_fits.csv'.format(folder=folder, kind=kind)
+    summary = pd.DataFrame({'R': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}, 'p': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}, 
+                       'alpha': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}, 'gamma': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0},
+                       'mu': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}, 'sigma': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0},
+                       'mean': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}, 'median': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0},
+                       'stdev': {'mlscc': 0, 'min': 0, 'max': 0, 'avg': 0}})
     
-    data = pk.load(open(rDistFile, 'rb'))
+    data = pk.load(open(f'networks/{folder}/mlscc_distortion.pickle', 'rb'))
+
+    ss = pd.Series(list(data[kind].values()), name='s-value')
+        
+    summary['mean']['mlscc'] = ss.mean()
+    summary['median']['mlscc'] = ss.median()
+    summary['stdev']['mlscc'] = ss.std()
     
-    summary = pd.DataFrame({'R': {'min': 0, 'max': 0, 'avg': 0}, 'p': {'min': 0, 'max': 0, 'avg': 0}, 
-                       'alpha': {'min': 0, 'max': 0, 'avg': 0}, 'gamma': {'min': 0, 'max': 0, 'avg': 0},
-                       'mu': {'min': 0, 'max': 0, 'avg': 0}, 'sigma': {'min': 0, 'max': 0, 'avg': 0},
-                       'mean': {'min': 0, 'max': 0, 'avg': 0}, 'median': {'min': 0, 'max': 0, 'avg': 0},
-                       'stdev': {'min': 0, 'max': 0, 'avg': 0}})
-    
+    # Select only s-values
+    dfs = ss.loc[(ss > 1.0)].sort_values(ascending=False).to_frame()
+    xmin = 1
+    fit = powerlaw.Fit(dfs['s-value'], xmin=xmin, estimate_discrete=False)
+    summary['R']['mlscc'], summary['p']['mlscc'] = fit.distribution_compare('power_law', 'lognormal_positive') # Compare
+    # Parameters
+    summary['alpha']['mlscc'] = fit.power_law.alpha
+    summary['gamma']['mlscc'] = fit.power_law.sigma
+    summary['mu']['mlscc'] = fit.lognormal_positive.mu
+    summary['sigma']['mlscc'] = fit.lognormal_positive.sigma
+
+
+    data = pk.load(open(f'networks/{folder}/undirected_distortions.pickle', 'rb'))
+
     for type in ['min', 'max', 'avg']:
         ss = pd.Series(list(data[type][kind].values()), name='s-value')
         
@@ -61,6 +78,7 @@ def plot_s_dist(folder, kind):
         summary['mu'][type] = fit.lognormal_positive.mu
         summary['sigma'][type] = fit.lognormal_positive.sigma
     
+    wSummaryFile = 'networks/{folder:s}/undirected_{kind}_distortion_fits.csv'.format(folder=folder, kind=kind)
     summary.to_csv(wSummaryFile)
     
 

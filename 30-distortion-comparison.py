@@ -1,6 +1,5 @@
 # coding=utf-8
-# Author: Rion B Correia
-# Date: Dec 05, 2017
+# Author: Felipe X. Costa
 #
 # Description:
 # Compare directed and undirected S_{ij} value distribution for networks.
@@ -10,22 +9,23 @@
 
 from __future__ import division
 # Plotting
-import matplotlib as mpl
-mpl.use('Agg')
-mpl.rcParams['mathtext.fontset'] = 'cm'
-mpl.rcParams['mathtext.rm'] = 'serif'
-#mpl.rcParams['xtick.labelsize'] = 'medium'
-import matplotlib.pyplot as plt
-# General
-import numpy as np
-import pandas as pd
-pd.set_option('display.max_rows', 40)
-pd.set_option('display.max_columns', 20)
-pd.set_option('display.width', 1000)
+import networkx as nx
+import argparse
 import configparser
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import powerlaw
+import numpy as np
+import pickle as pk
 # Networks
 import pickle as pk
 from scipy.stats import mannwhitneyu
+
+alternative = {'business-faculty': 'greater', 'cs-faculty': 'greater', 'history-faculty': 'greater', 'celegans-her': 'greater', 'celegans-male': 'greater', 
+               'tennis-loss': 'greater', 'bike-sharing': 'greater', 'giraffe': 'less', 'comorbidity': 'greater', 'caviar-proj': 'greater', 
+               'colombia-calls': 'less', 'colombia-mobility': 'less', 'mobility-manizales': 'greater', 'mobility-medellin': 'greater', 
+               'yeast-grn': 'less', 'us-airports': 'less', 'DDI': 'greater', 'us-weblinks': 'greater'}
 
 if __name__ == '__main__':
     #
@@ -33,33 +33,56 @@ if __name__ == '__main__':
     #
     config = configparser.ConfigParser()
     config.read('networks.ini')
-    networks = list(config.keys())[1:]
+    #networks = list(config.keys())[1:]
     
-    uFdistortion = 'networks/{folder:s}/undirected_distortion.pickle'
-    dFdistortion = 'networks/{folder:s}/distortion.pickle'
-    
-    df = pd.DataFrame({'name': np.zeros(len(networks), dtype=str), 
-                       'AUC': np.zeros(len(networks)), 'PVal': np.zeros(len(networks)),
-                       'directed': np.zeros(len(networks)), 'undirected': np.zeros(len(networks))})
-    
-    for idx, network in enumerate(networks):
-        print(network)
-        settings = config[network]
-        folder = settings.get('folder')
+    for group in ['Undirected', 'Directed']:
+        print(group)
+        df = pd.read_csv('Summary/Larger_{group:s}.csv'.format(group=group), index_col=0)
         
-        df.name[idx] = network
-        
-        directed = pk.load(open(dFdistortion.format(folder=folder), 'rb'))
-        undirected = pk.load(open(uFdistortion.format(folder=folder), 'rb'))
-        
-        dir_svals = list(directed['metric'].values())
-        undir_svals = list(undirected['metric'].values())
-        
-        U, p = mannwhitneyu(dir_svals, undir_svals, alternative='less')
-    
-        df.AUC[idx] = U/(len(dir_svals)*len(undir_svals))
-        df.PVal[idx] = p
-        df.directed[idx] = np.median(np.log(dir_svals))
-        df.undirected[idx] = np.median(np.log(undir_svals))
-    
-    df.to_csv('Summary/Distortion_DirectComparison.csv')
+        for network in df.index:
+            #print(network)
+            folder = config[network].get('folder')
+
+            svals_dir = pk.load(open(f'networks/{folder}/mlscc_distortion.pickle', 'rb'))
+            svals_undir = pk.load(open(f'networks/{folder}/undirected_distortions.pickle', 'rb'))
+
+            # Metric Comparison
+            X = np.array(list(svals_dir['metric'].values()))
+            Y = np.array(list(svals_undir['avg']['metric'].values()))
+
+            U, p = mannwhitneyu(X, Y, alternative=alternative[network], method='asymptotic')
+            AUC = U/(len(X)*len(Y))
+            print(network, AUC, alternative[network], p)
+
+            fig, ax = plt.subplots()
+            #ax.boxplot([np.log10(X), np.log10(Y)], labels=['Directed', 'Undirected'])
+            ax.boxplot([X, Y], labels=['Directed', 'Undirected'])
+            ax.set_ylabel('Log Metric Distortion')
+            if alternative[network] == 'greater':
+                ax.set_title(f'{AUC=:.2f}    $p_>$= {p:.2e}')
+            if alternative[network] == 'less':
+                ax.set_title(f'{AUC=:.2f}    $p_<$= {p:.2e}')
+            plt.savefig(f'networks/{folder}/metric_distortion_comparison.png', dpi=300) 
+            plt.clf()
+
+
+            # Ultrametric Comparison
+            X = np.array(list(svals_dir['ultrametric'].values()))
+            Y = np.array(list(svals_undir['max']['ultrametric'].values()))
+
+            U, p = mannwhitneyu(X, Y, alternative=alternative[network], method='asymptotic')
+            AUC = U/(len(X)*len(Y))
+            print(network, AUC, alternative[network], p)
+
+            fig, ax = plt.subplots()
+            #ax.boxplot([np.log10(X), np.log10(Y)], labels=['Directed', 'Undirected'])
+            ax.boxplot([X, Y], labels=['Directed', 'Undirected'])
+            ax.set_ylabel('Log Metric Distortion')
+            if alternative[network] == 'greater':
+                ax.set_title(f'{AUC=:.2f}    $p_>$= {p:.2e}')
+            if alternative[network] == 'less':
+                ax.set_title(f'{AUC=:.2f}    $p_<$= {p:.2e}')
+            plt.savefig(f'networks/{folder}/ultrametric_distortion_comparison.png', dpi=300) 
+            plt.clf()
+
+
