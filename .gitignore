@@ -4,6 +4,7 @@
 # Networks to ignore
 networks/DDI
 networks/weblinks_us
+networks/new_undirected
 # Not used in the manuscript
 networks/online_dating
 networks/pop-flow
@@ -21,6 +22,7 @@ Summary/
 _shortest_path.py
 test.py
 caviar_subnet.graphml
+bussiness_breakdown.graphml
 
 # New stuff for now
 new_networks/

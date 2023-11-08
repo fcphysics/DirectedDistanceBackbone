@@ -6,8 +6,9 @@ Created on Wed Nov  1 16:35:36 2023
 """
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy import stats
+import numpy as np
+import seaborn as sns
 
 simas_metric = [16.14, 37.15, 1.75, 5.5, 9.23, 17.57, 46.97, 
                 49.25, 7.84, 9.5, 31.96, 77.27, 81.13, 83.59, 
@@ -17,106 +18,67 @@ simas_ultrametric = [8.98, 16.75, 0.83, 0.2, 5.66, 5.53, 13.97,
                      5.53, 0.66, 2.9, 11.65, 62.77, 70.62, 78.45, 
                      0.43, 1.47, 7.59, 7.79]
 
-
-
 wcc_metric = [6.37, 47.44, 54, 55.69, 59, 99.86, 2.6, 35.08, 
               41.43, 51.49, 59.62, 70.51, 76.67, 91.63, 1.71, 
               24.67, 26.65, 27.43, 36.78, 59.53]
 
-wcc_ultametric = [1.38, 2.17, 27.69, 26.77, 40.49, 99.84, 0.89, 
+wcc_ultrametric = [1.38, 2.17, 27.69, 26.77, 40.49, 99.84, 0.89, 
                   9.76, 21.99, 22.67, 23.78, 64.75, 33.33, 84.89, 
                   1.22, 5.44, 7.66, 18.98, 25.37, 2.75]
 
+lscc_metric = [6.62, 53.43, 55.32, 47.44, 59, 36.52, 43.02, 
+               52.85, 58.25, 66.12, 2.6, 76.67, 59.53, 88.32, 
+               27.11, 38, 1.71, 24.67, 26.65]
 
+lscc_ultrametric = [1.55, 26.82, 25.67, 2.17, 40.49, 9.46, 
+                    20.88, 22.02, 21.19, 59.92, 0.89, 33.33, 
+                    2.75, 77.37, 18.63, 25.63, 1.22, 5.44, 7.66]
 
-lscc_metric = [1.55, 26.82, 25.67, 2.17, 40.49, 9.46, 20.88, 
-               22.02, 21.19, 59.92, 99.84, 0.89, 33.33, 2.75, 
-               77.37, 18.63, 25.63, 1.22, 5.44, 7.66]
+def sig_symbol(p):
+    if p < 0.001:
+        return '***'
+    elif p < 0.01:
+        return '**'
+    elif p < 0.05:
+        return '*'
 
-lscc_ultrametric = [23.39, 50.2, 46.41, 4.58, 68.63, 25.91, 48.53, 
-                    41.67, 36.37, 90.63, 99.98, 34.22, 43.48, 4.62, 
-                    87.6, 68.72, 67.44, 71.19, 22.06, 28.76]
+# Drawing #
 
-def box_and_whisker(data, title, ylabel, xticklabels):
-    """
-    Create a box-and-whisker plot with significance bars.
-    """
-    ax = plt.axes()
-    bp = ax.boxplot(data, widths=0.6, patch_artist=True)
-    # Graph title
-    ax.set_title(title, fontsize=14)
-    # Label y-axis
-    ax.set_ylabel(ylabel)
-    # Label x-axis ticks
-    ax.set_xticklabels(xticklabels)
-    # Hide x-axis major ticks
-    ax.tick_params(axis='x', which='major', length=0)
-    # Show x-axis minor ticks
-    xticks = [0.5] + [x + 0.5 for x in ax.get_xticks()]
-    ax.set_xticks(xticks, minor=True)
-    # Clean up the appearance
-    ax.tick_params(axis='x', which='minor', length=3, width=1)
+#print(min(simas_metric), max(simas_metric))
+#print(min(simas_ultrametric), max(simas_ultrametric))
 
-    # Change the colour of the boxes to Seaborn's 'pastel' palette
-    colors = sns.color_palette('pastel')
-    for patch, color in zip(bp['boxes'], colors):
-        patch.set_facecolor(color)
+data = {'metric' :[simas_metric, lscc_metric, wcc_metric], 'ultrametric': [simas_ultrametric, lscc_ultrametric, wcc_ultrametric]}
 
-    # Colour of the median lines
-    plt.setp(bp['medians'], color='k')
+'''
+from itertools import permutations
 
-    # Check for statistical significance
-    significant_combinations = []
-    # Check from the outside pairs of boxes inwards
-    ls = list(range(1, len(data) + 1))
-    combinations = [(ls[x], ls[x + y]) for y in reversed(ls) for x in range((len(ls) - y))]
-    for c in combinations:
-        data1 = data[c[0] - 1]
-        data2 = data[c[1] - 1]
-        # Significance
-        U, p = stats.mannwhitneyu(data1, data2, alternative='two-sided')
-        if p < 0.05:
-            significant_combinations.append([c, p])
+for btype, sets in data.items():
+    print(btype)
+    for i, j in permutations(range(len(sets)), 2):
+        U, p = stats.mannwhitneyu(sets[i], sets[j], alternative='less')
+        print(i, j, U, p)
+'''
 
-    # Get info about y-axis
-    bottom, top = ax.get_ylim()
-    yrange = top - bottom
+fig, ax = plt.subplot_mosaic(np.array(list(data.keys())).reshape(1, len(data.keys())), figsize=(16, 8))
 
-    # Significance bars
-    for i, significant_combination in enumerate(significant_combinations):
-        # Columns corresponding to the datasets of interest
-        x1 = significant_combination[0][0]
-        x2 = significant_combination[0][1]
-        # What level is this bar among the bars above the plot?
-        level = len(significant_combinations) - i
-        # Plot the bar
-        bar_height = (yrange * 0.08 * level) + top
-        bar_tips = bar_height - (yrange * 0.02)
-        plt.plot(
-            [x1, x1, x2, x2],
-            [bar_tips, bar_height, bar_height, bar_tips], lw=1, c='k')
-        # Significance level
-        p = significant_combination[1]
-        if p < 0.001:
-            sig_symbol = '***'
-        elif p < 0.01:
-            sig_symbol = '**'
-        elif p < 0.05:
-            sig_symbol = '*'
-        text_height = bar_height + (yrange * 0.01)
-        plt.text((x1 + x2) * 0.5, text_height, sig_symbol, ha='center', c='k')
+for btype, sets in data.items():
+    ax[btype].boxplot(sets, labels=[r'Simas $\it{et\,\, al.}$ 2021', 'LSCC', 'WCC'], widths=0.4)
+    for idx, vals in enumerate(sets):
+        ax[btype].scatter(np.full(len(vals), idx+1), vals, c='k', marker='o', alpha=0.25)
+    
+    bottom = 101
+    eps = 0.01
+    for i, j in [(0, 1), (0, 2)]:
+        U, p = stats.mannwhitneyu(sets[i], sets[j], alternative='less')
+        print(i, j, U/(len(sets[i])*len(sets[j])), p)
+        ax[btype].plot([1+i+eps, 1+i+eps, 1+j-eps, 1+j-eps], [bottom, bottom+2, bottom+2, bottom], lw=1, c='k')
+        ax[btype].text(1+0.5*(i+j), bottom+2.5, 'p={pval:.02f}'.format(pval=p), ha='center', c='k')
+        bottom += 3
+    
+    ax[btype].set_ylabel(rf'$\tau^{btype[0]}$', fontsize=20, rotation=0)
+    ax[btype].tick_params(axis='x', labelsize=18)
+    ax[btype].set_title(f'{btype.capitalize()} Backbone', fontsize=20)
+    #plt.xticks(fontsize=18)
 
-    # Adjust y-axis
-    bottom, top = ax.get_ylim()
-    yrange = top - bottom
-    ax.set_ylim(bottom - 0.02 * yrange, top)
-
-    # Annotate sample size below each box
-    for i, dataset in enumerate(data):
-        sample_size = len(dataset)
-        ax.text(i + 1, bottom, fr'n = {sample_size}', ha='center', size='x-small')
-
-    plt.show()
-
-box_and_whisker([simas_metric, wcc_metric, lscc_metric], 
-                'title', 'ylabel', ['Simas', 'WCC', 'LSCC'])
+plt.tight_layout()
+plt.show()

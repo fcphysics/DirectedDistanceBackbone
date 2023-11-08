@@ -51,6 +51,7 @@ if __name__ == '__main__':
     rGraphml = ['networks/{folder:s}/undirected_wcc_network.graphml'.format(folder=folder),
                 'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
                 'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)]
+    
     wFdistortion = 'networks/{folder:s}/undirected_distortions.pickle'.format(folder=folder)
     wGraphml = 'networks/{folder:s}/undirected_{type:s}_backbone.graphml'
 

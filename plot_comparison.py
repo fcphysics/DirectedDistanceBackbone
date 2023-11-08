@@ -1,43 +1,52 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 import numpy as np
 
-import matplotlib
-matplotlib.use('TkAgg')
+#import matplotlib
+#matplotlib.use('TkAgg')
 
 ##############################
 ## Backbone Size Comparison ##
 ##############################
 
-for type in ['Metric', 'Ultrametric']:
-    data = pd.read_csv(f'Summary/{type}BackboneSizeComparison.csv', index_col=0)
-    
-    fig, ax = plt.subplots(figsize=(6,6))
-    
-    ax.scatter(data.directed, data.Avg, s=50, c='g', label='Average Strength', alpha=0.5, marker='s')
-    ax.scatter(data.directed, data.Max, s=50, c='b', label='Maximum Strength', alpha=0.5, marker='*')
-    ax.scatter(data.directed[:18], data.Min[:18], s=50, c='r', label='Minimum Strength', alpha=0.25, marker='o')
-    ax.plot([0, 1], [0, 1], 'k-', lw=2)
-    ax.set_xlabel('Directed Backbone Size')
-    ax.set_ylabel('Undirected Backbone Size')
-    ax.legend()
-    
-    X = np.maximum(np.maximum(data.Avg, data.Max), data.Min)
-    Y = np.minimum(np.minimum(data.Avg, data.Max), list(data.Min)[:18]+[10, 10])
-    ax.plot([data.directed, data.directed], [X, Y], 'k--', lw=1)
-    
-    ax.set_xlim((0, 0.05))
-    ax.set_ylim((0, 0.05))
-    ax.set_aspect(1)
-    # Annotate networks that have larger undirected than directed backbone
-    # #ax.annotate("Manizales Mobility", xy=(0.084591, 0.085090), xytext=(0.0, 0.3), arrowprops=dict(arrowstyle="->"))
-    # #ax.annotate("Giraffe Socialization", xy=(0.766667, 0.800000), xytext=(0.55, 0.9), arrowprops=dict(arrowstyle="->"))
-    # #ax.annotate("Co-morbidity Risk", xy=(0.474356, 0.505039), xytext=(0.3, 0.6), arrowprops=dict(arrowstyle="->"))
-    
-    plt.tight_layout()
-    #plt.show()
-    plt.savefig(f'Figures/{type}SizeComparisonAllFocused.pdf', dpi=300)
+df = pd.read_csv('Summary/BackboneCompareStats.csv', index_col=0)
+
+fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+
+# Same commands for both axis
+ax[0].scatter(df['metric'], df[f'metric_avg'], marker='s', c='g', label='Average')
+ax[1].scatter(df['ultrametric'], df[f'ultrametric_max'], marker='^', c='b', label='Maximum')
+
+for i in range(2):
+    ax[i].plot([0, 1], [0, 1], 'k-')
+    #ax[i].legend(fontsize=12, loc=4)
+    ax[i].set_aspect('equal')
+
+ax[0].set_title('Metric Backbone Size', fontsize=20)    
+ax[0].set_ylabel(r'$\tau^m(U^{avg})$', fontsize=16)
+ax[0].set_xlabel(r'$\tau^m(\tilde{D})$', fontsize=16)
+
+ax[1].set_title('Ultrametric Backbone Size', fontsize=20)    
+ax[1].set_ylabel(r'$\tau^u(U^{max})$', fontsize=16)
+ax[1].set_xlabel(r'$\tau^u(\tilde{D})$', fontsize=16)
+
+# Add Ultrametric inset
+axes = zoomed_inset_axes(ax[1], 4.0, loc=2, borderpad=1.8)
+axes.scatter(df['ultrametric'], df['ultrametric_max'], marker='^', c='b', label='Maximum')
+axes.plot([0, 0.1], [0, 0.1], 'k-')
+
+axes.yaxis.tick_right()
+axes.set_xlim((0, 0.1))
+axes.set_ylim((0, 0.1))
+axes.set_aspect('equal')
+axes.set_yticks([0.0, 0.05, 0.10])
+
+plt.tight_layout()
+#plt.show()
+plt.savefig('Figures/BackboneSizeComparison.png', dpi=300)
+
 
 '''
 ##############################

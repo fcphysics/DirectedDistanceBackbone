@@ -26,8 +26,10 @@ btype = 'max' #'avg' #
 
 if btype == 'avg':
     disjunction = sum
+    bbone = 'metric'
 elif btype == 'max':
     disjunction = max
+    bbone = 'ultrametric'
 
 for group in ['Undirected', 'Directed']:
     print(group)
@@ -44,24 +46,18 @@ for group in ['Undirected', 'Directed']:
         print(network)
         folder = config[network].get('folder')
         
-        '''
-        if btype == 'metric':
-            Bu = nx.read_graphml(f'networks/{folder}/undirected_avg_backbone.graphml')
-        elif btype == 'ultrametric':
-            Bu = nx.read_graphml(f'networks/{folder}/undirected_max_backbone.graphml')
-        '''
-        Bu = nx.read_graphml(f'networks/{folder}/undirected_{btype}_backbone.graphml')
+        U = nx.read_graphml(f'networks/{folder}/undirected_{btype}_backbone.graphml')
         Bd = nx.read_graphml(f'networks/{folder}/mlscc_backbone.graphml')
-        
-        svals = pk.load(open(f'networks/{folder}/mlscc_distortion.pickle', 'rb'))
-        
-        '''
-        all_paths = {n: dict() for n in Bu.nodes}
-        for u, path in all_pairs_dijkstra_path(Bd, weight='distance', disjunction=max):
-            all_paths[u] = path
-        '''
 
-        for (u, v) in svals['metric'].keys():                
+        if btype == 'max':
+            is_um = nx.get_edge_attributes(U, name='ultrametric')
+            um_edges = [key for key, val in is_um.items() if val]
+            Bu = U.edge_subgraph(um_edges).copy()
+        elif btype == 'avg':
+            Bu = U.copy()
+
+        svals = pk.load(open(f'networks/{folder}/mlscc_distortion.pickle', 'rb'))
+        for (u, v) in svals[bbone].keys():                
             if Bd.has_edge(v, u):
                 df.loc[network, 'partial'] += 1
                 df.loc[network, 'partial_undirected'] += int(Bu.has_edge(u, v))
@@ -78,10 +74,6 @@ for group in ['Undirected', 'Directed']:
     
     df['total'] = df['partial'] + df['complete']
     df['total_undirected'] = df['partial_undirected'] + df['complete_undirected']
-
-    #df.to_csv(f'Summary/Metric_UnreciprocalPaths_{group}.csv')
-    if btype == 'avg':
-        df.to_csv(f'Summary/Metric_UnreciprocalPaths_{group}.csv')
-    elif btype == 'max':
-        df.to_csv(f'Summary/Ultrametric_UnreciprocalPaths_{group}.csv')
+    
+    df.to_csv(f'Summary/{bbone.capitalize()}_UnreciprocalPaths_{group}.csv')
     print(df)

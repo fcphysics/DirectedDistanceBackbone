@@ -44,10 +44,11 @@ if __name__ == '__main__':
                 'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
                 'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)]
     rBraphml = 'networks/{folder:s}/undirected_{type:s}_backbone.graphml'
-    wGstats = 'networks/{folder:s}/undirected-stats.csv'.format(folder=folder)
+    #wGstats = 'networks/{folder:s}/undirected-stats.csv'.format(folder=folder)
+    wGstats = 'networks/{folder:s}/undirected-stats_nedges.csv'.format(folder=folder)
     
-    df = pd.DataFrame(columns=['n_nodes', 'n_edges', 'density', 'tau_metric', 'tau_ultrametric', 'ultra_per_metric'],
-                      index=['min', 'harm', 'max', 'avg', 'mlscc'])
+    #df = pd.DataFrame(columns=['n_nodes', 'n_edges', 'density', 'tau_metric', 'tau_ultrametric', 'ultra_per_metric'], index=['min', 'harm', 'max', 'avg', 'mlscc'])
+    df = pd.DataFrame(columns=['n_nodes', 'nedges', 'density', 'nedges_metric', 'nedges_ultrametric'], index=['min', 'harm', 'max', 'avg', 'mlscc'])
     
     types = [['min', 'harm'], ['max', 'avg'], ['mlscc']]
     
@@ -56,13 +57,13 @@ if __name__ == '__main__':
         for type in types[i]:
     
             df['n_nodes'][type] = G.number_of_nodes()                        
-            df['n_edges'][type] = G.number_of_edges()
+            df['nedges'][type] = G.number_of_edges()
             df['density'][type] = nx.density(G)
             
             if df['n_edges'][type] < 1.0:
-                df['tau_metric'][type] = 0.0
-                df['tau_ultrametric'][type] = 0.0
-                df['ultra_per_metric'][type] = 0.0
+                df['nedges_metric'][type] = 0.0
+                df['nedges_ultrametric'][type] = 0.0
+                #df['ultra_per_metric'][type] = 0.0
                 continue    
             
             try:
@@ -70,9 +71,14 @@ if __name__ == '__main__':
             except:
                 B = nx.read_graphml(f'networks/{folder}/mlscc_backbone.graphml')
             
+            '''
             df['tau_metric'][type] = B.number_of_edges()/df['n_edges'][type]
             df['tau_ultrametric'][type] = sum([int(w) for _, _, w in B.edges(data='ultrametric')])/df['n_edges'][type]
             df['ultra_per_metric'][type] = df['tau_ultrametric'][type]/df['tau_metric'][type]
+            '''
+            df['nedges_metric'][type] = B.number_of_edges()
+            df['nedges_ultrametric'][type] = sum([int(w) for _, _, w in B.edges(data='ultrametric')])
+
 
     # Print
     print(df)
