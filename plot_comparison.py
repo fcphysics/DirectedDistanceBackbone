@@ -25,11 +25,11 @@ for i in range(2):
     ax[i].set_aspect('equal')
 
 ax[0].set_title('Metric Backbone Size', fontsize=20)    
-ax[0].set_ylabel(r'$\tau^m(U^{avg})$', fontsize=16)
+ax[0].set_ylabel(r'$\tau^m(\Delta^{avg})$', fontsize=16)
 ax[0].set_xlabel(r'$\tau^m(\tilde{D})$', fontsize=16)
 
 ax[1].set_title('Ultrametric Backbone Size', fontsize=20)    
-ax[1].set_ylabel(r'$\tau^u(U^{max})$', fontsize=16)
+ax[1].set_ylabel(r'$\tau^u(\Delta^{max})$', fontsize=16)
 ax[1].set_xlabel(r'$\tau^u(\tilde{D})$', fontsize=16)
 
 # Add Ultrametric inset

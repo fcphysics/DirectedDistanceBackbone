@@ -7,6 +7,7 @@ networks/weblinks_us
 networks/new_undirected
 # Not used in the manuscript
 networks/online_dating
+networks/bike-sharing_allweek
 networks/pop-flow
 
 # Do not upload local files
@@ -32,9 +33,9 @@ script*
 
 # Do not upload large graph files
 *.gpickle
-#.graphml
-*network.graphml
-*backbone.graphml
+.graphml
+#*network.graphml
+#*backbone.graphml
 *.pickle
 # Nor distortion plots
 *.pdf

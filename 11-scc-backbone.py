@@ -51,12 +51,12 @@ if __name__ == '__main__':
     
     
     # Files
-    wGgraphml = 'networks/{folder:s}/backbone.graphml'.format(folder=folder)
-    wFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
+    wGgraphml = 'networks/{folder:s}/backbone_lscc.graphml'.format(folder=folder)
+    wFdistortion = 'networks/{folder:s}/distortion_lscc.pickle'.format(folder=folder)
     #wFasymmetry = 'networks/{folder:s}/asymmetry.pickle'.format(folder=folder)
     
     # Load Network
-    rGfile = 'networks/{folder:s}/network.graphml'.format(folder=folder) 
+    rGfile = 'networks/{folder:s}/network_lscc.graphml'.format(folder=folder) 
 
     # Load graph
     print("Loading network: {network:s}".format(network=network))
@@ -95,3 +95,41 @@ if __name__ == '__main__':
     #pk.dump(alpha, open(wFasymmetry, 'wb'))
     
     print('\n\n')
+    
+    wGstats = 'networks/{folder:s}/network_lscc-stats.csv'.format(folder=folder)
+    
+    # Calculate stats
+    n_nodes = Go.number_of_nodes()
+    n_edges = Go.number_of_edges()
+
+    density = nx.density(Go)
+    
+    n_edges_metric = G.number_of_edges()
+    n_edges_ultrametric = U.number_of_edges()
+    
+    # to Result Series
+    sR = pd.Series({
+        'n_nodes': n_nodes,
+        'nedges': n_edges,
+        #
+        'density': density,
+        #
+        #'n-edges-metric': n_edges_metric,
+        #'n-edges-ultrametric': n_edges_ultrametric,
+        #
+        'nedges_metric': n_edges_metric,
+        'nedges_ultrametric': n_edges_ultrametric,
+        #
+        #'%-redundancy-metric': 1 - (n_edges_metric / n_edges),
+        #'%-redundancy-ultrametric': 1 - (n_edges_ultrametric / n_edges),
+        #
+        'ultra_per_metric': (n_edges_ultrametric / n_edges_metric),
+        #
+    }, name=network, dtype='object')
+
+    # Print
+    print(sR)
+    sR.to_csv(wGstats)
+    #print('> Asymmetry')
+    #pk.dump(alpha, open(wFasymmetry, 'wb'))
+    print("\n\n")

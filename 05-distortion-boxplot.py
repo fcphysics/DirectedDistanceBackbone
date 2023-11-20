@@ -84,11 +84,11 @@ if __name__ == '__main__':
     
     kind = 'ultrametric'
     
-    data = [('Pipes', 'water-pipes'), ('Bike', 'bike-sharing'), ('C.S.', 'academic_hiring/computer_science'),
+    data = [('Bike', 'bike-sharing'), ('C.S.', 'academic_hiring/computer_science'),
         ('Co. Risk', 'comorbidity'), ('Hist.', 'academic_hiring/history'), ('Giraffe', 'giraffe'), ('Tennis', 'tennis_losses')]
 
     dfp = pd.DataFrame(data, columns=['label', 'folder'])
-    dfp['color'] = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2']#, '#7f7f7f', '#bcbd22']
+    dfp['color'] = ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2']#, '#7f7f7f', '#bcbd22']
 
     plot_global_boxplots(dfp, kind=kind, part=1)
     

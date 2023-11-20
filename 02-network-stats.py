@@ -72,15 +72,15 @@ if __name__ == '__main__':
     # to Result Series
     sR = pd.Series({
         'n_nodes': n_nodes,
-        'n_edges': n_edges,
+        'nedges': n_edges,
         #
         'density': density,
         #
         #'n-edges-metric': n_edges_metric,
         #'n-edges-ultrametric': n_edges_ultrametric,
         #
-        'tau_metric': (n_edges_metric / n_edges),
-        'tau_ultrametric': (n_edges_ultrametric / n_edges),
+        'nedges_metric': n_edges_metric,
+        'nedges_ultrametric': n_edges_ultrametric,
         #
         #'%-redundancy-metric': 1 - (n_edges_metric / n_edges),
         #'%-redundancy-ultrametric': 1 - (n_edges_ultrametric / n_edges),
