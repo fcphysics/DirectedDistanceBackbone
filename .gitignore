@@ -33,7 +33,7 @@ script*
 
 # Do not upload large graph files
 *.gpickle
-.graphml
+*.graphml
 #*network.graphml
 #*backbone.graphml
 *.pickle
