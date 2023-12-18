@@ -1,7 +1,7 @@
 ,celegans-male
 n_nodes,328
-n_edges,3474
+nedges,3474
 density,0.03238979637502797
-tau_metric,0.5400115141047783
-tau_ultrametric,0.27691421991940124
+nedges_metric,1876
+nedges_ultrametric,962
 ultra_per_metric,0.5127931769722814

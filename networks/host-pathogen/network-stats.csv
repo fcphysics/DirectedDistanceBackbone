@@ -1,7 +1,7 @@
 ,host-pathogen
 n_nodes,10578
-n_edges,18529
+nedges,18529
 density,0.00016560975484625947
-tau_metric,0.9985967942144746
-tau_ultrametric,0.9984348858546063
+nedges_metric,18503
+nedges_ultrametric,18500
 ultra_per_metric,0.9998378641301411

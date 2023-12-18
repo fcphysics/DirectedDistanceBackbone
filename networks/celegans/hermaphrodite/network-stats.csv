@@ -1,7 +1,7 @@
 ,celegans-her
 n_nodes,313
-n_edges,3500
+nedges,3500
 density,0.03584009175063488
-tau_metric,0.5568571428571428
-tau_ultrametric,0.26771428571428574
+nedges_metric,1949
+nedges_ultrametric,937
 ultra_per_metric,0.4807593637762955

@@ -4,20 +4,81 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 import numpy as np
 
-#import matplotlib
-#matplotlib.use('TkAgg')
+###########################################
+## Backbone Size Comparison - LSCC X WCC ##
+###########################################
 
-##############################
-## Backbone Size Comparison ##
-##############################
+wcc_bbone = pd.read_csv('Summary/BackboneStats.csv', index_col=0)
+scc_bbone = pd.read_csv('Summary/BackboneStats_LSCC.csv', index_col=0)
 
-df = pd.read_csv('Summary/BackboneCompareStats.csv', index_col=0)
+bbone = wcc_bbone.join(scc_bbone, rsuffix='_lscc')
+bbone.drop('host-pathogen', inplace=True)
+bbone = bbone[bbone.n_nodes_lscc < bbone.n_nodes]
+#bbone = bbone.join(components, rsuffix='_cc')
+
+bbone['real_diff_metric'] = (bbone[f'tau_metric_lscc']-bbone[f'tau_metric'])/bbone[f'tau_metric']
+bbone['real_diff_ultrametric'] = (bbone[f'tau_ultrametric_lscc']-bbone[f'tau_ultrametric'])/bbone[f'tau_ultrametric']
+bbone['real_density'] =  bbone['density_lscc']/bbone['density']
+
+for name, group in bbone.groupby('type'):
+    plt.scatter(group.real_diff_metric, group.real_diff_ultrametric, marker='o', s=75*(group.real_density), label=name)
+plt.plot([-0.07, 0.05], [0, 0], 'k--')
+plt.plot([0, 0], [-0.15, 0.15], 'k--')
+plt.legend()
+#plt.xlabel('Metric Relative Error', fontsize=14)
+#plt.ylabel('Ultrametric Relative Error', fontsize=14)
+plt.xlabel(r'$\xi^m$', fontsize=16)
+plt.ylabel(r'$\xi^u$', fontsize=16)
+#plt.show()
+plt.tight_layout()
+plt.savefig('Figures/LSCC_WCC_Comparison.png', dpi=300)
+plt.clf()
+
+#############################################
+## Backbone Size Comparison - LSCC X Tilde ##
+#############################################
+
+scc_bbone = pd.read_csv('Summary/BackboneStats_LSCC.csv', index_col=0)
+tilde_bbone = pd.read_csv('Summary/UndirectedBackboneStats.csv', index_col=0)
+
+bbone = tilde_bbone.join(scc_bbone, rsuffix='_lscc')
+bbone = bbone[bbone.n_nodes_lscc > bbone.n_nodes]
+#bbone
+
+bbone['real_diff_metric'] = (bbone[f'metric']-bbone[f'tau_metric'])/bbone[f'tau_metric']
+bbone['real_diff_ultrametric'] = (bbone[f'ultrametric']-bbone[f'tau_ultrametric'])/bbone[f'tau_ultrametric']
+
+bbone['max_edges'] = bbone['n_nodes']*(bbone['n_nodes']-1)
+bbone['density_tilde'] = bbone['nd_edges']/bbone['max_edges']
+bbone['real_density'] = bbone['density']/bbone['density_tilde']
+
+for name, group in bbone.groupby('type'):
+    plt.scatter(group.real_diff_metric, group.real_diff_ultrametric, marker='o', s=75*(group.real_density), label=name)
+
+plt.plot([-0.13, 0.76], [0, 0], 'k--')
+plt.plot([-0.13, 0.76], [1, 1], 'k:')
+plt.plot([0, 0], [-0.4, 1.37], 'k--')
+plt.legend()
+plt.xlabel(r'$\tilde{\xi}^m$', fontsize=16)
+plt.ylabel(r'$\tilde{\xi}^u$', fontsize=16)
+#plt.show()
+plt.tight_layout()
+plt.savefig('Figures/Tilde_LSCC_Comparison.png', dpi=300)
+plt.clf()
+
+'''
+
+##################################################
+## Backbone Size Comparison - Undirected X LSCC ##
+##################################################
+
+df = pd.read_csv('Summary/UndirectedBackboneStats.csv', index_col=0)
 
 fig, ax = plt.subplots(1, 2, figsize=(12, 6))
 
 # Same commands for both axis
-ax[0].scatter(df['metric'], df[f'metric_avg'], marker='s', c='g', label='Average')
-ax[1].scatter(df['ultrametric'], df[f'ultrametric_max'], marker='^', c='b', label='Maximum')
+ax[0].scatter(df['metric'], df[f'metric_avg'], marker='o', c='g', label='Average')
+ax[1].scatter(df['ultrametric'], df[f'ultrametric_max'], marker='o', c='b', label='Maximum')
 
 for i in range(2):
     ax[i].plot([0, 1], [0, 1], 'k-')
@@ -34,7 +95,7 @@ ax[1].set_xlabel(r'$\tau^u(\tilde{D})$', fontsize=16)
 
 # Add Ultrametric inset
 axes = zoomed_inset_axes(ax[1], 4.0, loc=2, borderpad=1.8)
-axes.scatter(df['ultrametric'], df['ultrametric_max'], marker='^', c='b', label='Maximum')
+axes.scatter(df['ultrametric'], df['ultrametric_max'], marker='o', c='b', label='Maximum')
 axes.plot([0, 0.1], [0, 0.1], 'k-')
 
 axes.yaxis.tick_right()
@@ -44,11 +105,10 @@ axes.set_aspect('equal')
 axes.set_yticks([0.0, 0.05, 0.10])
 
 plt.tight_layout()
-#plt.show()
-plt.savefig('Figures/BackboneSizeComparison.png', dpi=300)
+plt.show()
+#plt.savefig('Figures/BackboneSizeComparison.png', dpi=300)
 
 
-'''
 ##############################
 ## Fuzzy Reciprocity Change ##
 ##############################
@@ -139,5 +199,4 @@ ax.annotate("Co-morbidity Risk", xy=(1.317454667101697, 1.2802271595641688), xyt
 #plt.show()
 plt.tight_layout()
 plt.savefig('Figures/DistortionMedianComparison.pdf', dpi=300)
-
 '''

@@ -1,7 +1,7 @@
 ,tennis-loss
 n_nodes,4245
-n_edges,101436
+nedges,101436
 density,0.005630397351655049
-tau_metric,0.5961985882724082
-tau_ultrametric,0.23776568476674947
+nedges_metric,60476
+nedges_ultrametric,24118
 ultra_per_metric,0.39880283087505786

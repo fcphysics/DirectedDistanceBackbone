@@ -1,7 +1,7 @@
 ,caviar-proj
 n_nodes,110
-n_edges,295
+nedges,295
 density,0.024603836530442035
-tau_metric,0.7050847457627119
-tau_ultrametric,0.6474576271186441
+nedges_metric,208
+nedges_ultrametric,191
 ultra_per_metric,0.9182692307692307

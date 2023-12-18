@@ -1,7 +1,7 @@
 ,us-weblinks
 n_nodes,42800
-n_edges,505476
+nedges,505476
 density,0.0002759453939551824
-tau_metric,0.36780974764380503
-tau_ultrametric,0.36780974764380503
-ultra_per_metric,1.0
+nedges_metric,185919
+nedges_ultrametric,128223
+ultra_per_metric,0.6896713084730447

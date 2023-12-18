@@ -40,36 +40,29 @@ if __name__ == '__main__':
     folder = settings.get('folder')
     
     # Files
-    rGraphml = ['networks/{folder:s}/undirected_wcc_network.graphml'.format(folder=folder),
-                'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
+    
+    rGraphml = ['networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
                 'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)]
-    rBraphml = 'networks/{folder:s}/undirected_{type:s}_backbone.graphml'
-    #wGstats = 'networks/{folder:s}/undirected-stats.csv'.format(folder=folder)
-    wGstats = 'networks/{folder:s}/undirected-stats_nedges.csv'.format(folder=folder)
+    rBraphml = ['networks/{folder:s}/undirected_{type:s}_backbone.graphml', 
+                'networks/{folder}/directed_scc_backbone.graphml']
+    
+    wGstats = 'networks/{folder:s}/undirected-stats.csv'.format(folder=folder)
+    #wGstats = 'networks/{folder:s}/undirected-stats_nedges.csv'.format(folder=folder)
     
     #df = pd.DataFrame(columns=['n_nodes', 'n_edges', 'density', 'tau_metric', 'tau_ultrametric', 'ultra_per_metric'], index=['min', 'harm', 'max', 'avg', 'mlscc'])
-    df = pd.DataFrame(columns=['n_nodes', 'nedges', 'density', 'nedges_metric', 'nedges_ultrametric'], index=['min', 'harm', 'max', 'avg', 'mlscc'])
+    df = pd.DataFrame(columns=['n_nodes', 'nedges', 'density', 'nedges_metric', 'nedges_ultrametric'], index=['max', 'avg', 'dir_scc'])
     
-    types = [['min', 'harm'], ['max', 'avg'], ['mlscc']]
+    types = [['max', 'avg'], ['dir_scc']]
     
-    for i in range(3):
+    for i in range(2):
         G = nx.read_graphml(rGraphml[i])        
         for type in types[i]:
     
             df['n_nodes'][type] = G.number_of_nodes()                        
             df['nedges'][type] = G.number_of_edges()
-            df['density'][type] = nx.density(G)
-            
-            if df['n_edges'][type] < 1.0:
-                df['nedges_metric'][type] = 0.0
-                df['nedges_ultrametric'][type] = 0.0
-                #df['ultra_per_metric'][type] = 0.0
-                continue    
-            
-            try:
-                B = nx.read_graphml(rBraphml.format(folder=folder, type=type))
-            except:
-                B = nx.read_graphml(f'networks/{folder}/mlscc_backbone.graphml')
+            df['density'][type] = nx.density(G)    
+
+            B = nx.read_graphml(rBraphml[i].format(folder=folder, type=type))
             
             '''
             df['tau_metric'][type] = B.number_of_edges()/df['n_edges'][type]

@@ -1,7 +1,7 @@
 ,mobility-medellin
 n_nodes,413
-n_edges,33884
+nedges,33884
 density,0.1991349114929829
-tau_metric,0.24672411757761775
-tau_ultrametric,0.05442096564750325
+nedges_metric,8360
+nedges_ultrametric,1844
 ultra_per_metric,0.22057416267942584

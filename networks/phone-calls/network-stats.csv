@@ -1,7 +1,7 @@
 ,phone-calls
 n_nodes,322
-n_edges,609
+nedges,609
 density,0.0058919138561560344
-tau_metric,0.916256157635468
-tau_ultrametric,0.8489326765188834
+nedges_metric,558
+nedges_ultrametric,517
 ultra_per_metric,0.9265232974910395

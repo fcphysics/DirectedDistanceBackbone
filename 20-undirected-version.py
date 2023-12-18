@@ -40,21 +40,20 @@ if __name__ == '__main__':
     weight_attr = settings.get('weight-attr')
 
     # Files
-    rGraphml = 'networks/{folder:s}/network.graphml'.format(folder=folder)
-    wGraphml = ['networks/{folder:s}/undirected_wcc_network.graphml'.format(folder=folder),
-                'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder),
-                'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)]
+    rGraphml = 'networks/{folder:s}/network_lscc.graphml'.format(folder=folder)
+    wUGraphml = 'networks/{folder:s}/undirected_scc_network.graphml'.format(folder=folder)
+    wDGraphml = 'networks/{folder:s}/directed_scc_network.graphml'.format(folder=folder)
     
     # Load Network
     print("Loading network: {network:s}".format(network=network))
     G = nx.read_graphml(rGraphml)
     nx.set_edge_attributes(G, values=None, name='alpha')
-    lscc = max(nx.strongly_connected_components(G), key=len)
     
-    U = [nx.Graph(), nx.Graph(), nx.DiGraph()] # WCC (min and harm) , LSCC (max and avg) , Directed from max and avg
-    U[0].add_nodes_from(G.nodes())
-    U[1].add_nodes_from(lscc)
-    U[2].add_nodes_from(lscc)
+    U = nx.Graph()
+    U.add_nodes_from(G.nodes())
+
+    D = nx.DiGraph()
+    D.add_nodes_from(G.nodes())
     
     for u, v, w in G.edges(data=True):
         if w['alpha'] == None:
@@ -65,21 +64,15 @@ if __name__ == '__main__':
                 G[v][u]['alpha'] = 0.0
                 dout = G[v][u]['distance']
                 
-                if (din + dout) == 0.0:
-                    U[0].add_edge(u, v, harm_distance=0.0, min_distance=0.0)
-                else:
-                    U[0].add_edge(u, v, harm_distance=2*din*dout/(din + dout), min_distance=min(din, dout))
-                
-                if u in lscc and v in lscc:
-                    U[1].add_edge(u, v, avg_distance=0.5*(din + dout), max_distance=max(din, dout))
-            else:
-                U[0].add_edge(u, v, harm_distance=2*din, min_distance=din)
+                U.add_edge(u, v, avg_distance=0.5*(din + dout), max_distance=max(din, dout))
     
-    U[1] = U[1].subgraph(max(nx.connected_components(U[1]), key=len))
-    U[2] = G.edge_subgraph(U[1].to_directed().edges())
+    print(network, nx.number_connected_components(U))
     
-    for i in range(3):
-        nx.write_graphml(U[i], wGraphml[i])
+    U = U.subgraph(max(nx.connected_components(U), key=len))
+    D = G.edge_subgraph(U.to_directed().edges())
+    
+    nx.write_graphml(U, wUGraphml)
+    nx.write_graphml(D, wDGraphml)
     #pk.dump(U, open(wGraphml, 'wb'))
     print("Done")
     

@@ -34,9 +34,9 @@ def plot_s_dist(folder, kind='metric', date=None):
     rFdistortion = 'networks/{folder:s}/distortion.pickle'.format(folder=folder)
 
     if date is not None:
-        wImgFile = 'networks/{folder:s}/{date:s}/dist-s-values-{kinds:s}.pdf'.format(folder=folder, date=date, kind=kind)
+        wImgFile = 'networks/{folder:s}/{date:s}/dist-s-values-{kinds:s}.png'.format(folder=folder, date=date, kind=kind)
     else:
-        wImgFile = 'networks/{folder:s}/dist-s-values-{kind:s}.pdf'.format(folder=folder, kind=kind)
+        wImgFile = 'networks/{folder:s}/dist-s-values-{kind:s}.png'.format(folder=folder, kind=kind)
     
     # Load semi-triangular distortion data
     data = pk.load(open(rFdistortion, 'rb'))
@@ -81,7 +81,7 @@ def plot_s_dist(folder, kind='metric', date=None):
 
     plt.tight_layout()
     plt.subplots_adjust(left=0.09, right=0.98, bottom=0.07, top=0.90, wspace=0, hspace=0.0)
-    plt.savefig(wImgFile, dpi=150, bbox_inches='tight')  # , pad_inches=0.05)
+    plt.savefig(wImgFile, dpi=300, bbox_inches='tight')  # , pad_inches=0.05)
 
 
 if __name__ == '__main__':

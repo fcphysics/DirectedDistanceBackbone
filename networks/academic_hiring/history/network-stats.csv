@@ -1,7 +1,7 @@
 ,history-faculty
 n_nodes,145
-n_edges,2428
+nedges,2428
 density,0.11628352490421456
-tau_metric,0.414332784184514
-tau_ultrametric,0.21993410214168038
+nedges_metric,1006
+nedges_ultrametric,534
 ultra_per_metric,0.5308151093439364

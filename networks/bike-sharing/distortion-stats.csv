@@ -1,7 +1,7 @@
 ,bike-sharing
-avg-metric-distrotion,2.0641451556224766
-std-metric-distrotion,5.746482376572031
-med-metric-distrotion,1.2679001386170317
-avg-ultrametric-distrotion,2.2656642639793887
-std-ultrametric-distrotion,0.8443258962297593
-med-ultrametric-distrotion,2.101589239008594
+avg-metric-distrotion,1.8350953448784177
+std-metric-distrotion,4.9447660448394055
+med-metric-distrotion,1.2191854233654877
+avg-ultrametric-distrotion,3.251090656400512
+std-ultrametric-distrotion,8.065849466714544
+med-ultrametric-distrotion,2.5747958387312257

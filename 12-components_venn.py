@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 import configparser
+import networkx as nx
 
 # Make sure we don't try to do GUI stuff when running tests
 import sys, os
@@ -15,7 +16,7 @@ from matplotlib.pyplot import gca
 from matplotlib_venn._common import *
 from matplotlib_venn._venn2 import compute_venn2_subsets, compute_venn2_areas, solve_venn2_circles, compute_venn2_regions, compute_venn2_colors
 
-def custom_venn2(subsets, set_labels=('A', 'B'), set_colors=('r', 'g'), alpha=0.4, normalize_to=1.0, ax=None, data_offset=0.0, label_offset=0.0, rounding=3):
+def custom_venn2(subsets, set_labels=('A', 'B'), set_colors=('r', 'g'), alpha=0.4, normalize_to=1.0, ax=None, data_offset=0.0, label_offset=0.0, rounding=2):
     '''
     Custom version of venn2 from matplotlib_venn.
     '''
@@ -44,7 +45,7 @@ def custom_venn2(subsets, set_labels=('A', 'B'), set_colors=('r', 'g'), alpha=0.
     label_positions = [r.label_position() for r in regions]
     
     #print(label_positions)
-    offset_positions = [data_offset*[a.mid_point()[0] for a in r.arcs][1] for r in regions]
+    offset_positions = [0, 0]#[data_offset*[a.mid_point()[0] for a in r.arcs][1] for r in regions]
     for i in range(2):
         label_positions[i][0] += offset_positions[i]
     #print(label_positions)
@@ -66,47 +67,50 @@ def custom_venn2(subsets, set_labels=('A', 'B'), set_colors=('r', 'g'), alpha=0.
 
 if __name__ == '__main__':
     
-    df = pd.read_csv('LOCAL/Edges_Components.csv')
-    df.set_index('network', inplace=True)
+    # Build Venn Diagram with the edges in the LSCC that are metric
+    # 1 - Metric edges not in LSCC
+    # 2 - semi-metric LSCC edges in WCC
+    # 3 - metric edges in LSCC
+    # Normalize to - Edges in WCC
+    #df = pd.read_csv('LOCAL/Edges_Components.csv')
+    #df.set_index('network', inplace=True)
     #print(df)
 
     config = configparser.ConfigParser()
     config.read('networks.ini')
+    networks = list(config.keys())[1:]
 
-    indexes = ['us-airports', 'business-faculty', 'cs-faculty', 'history-faculty', 'caviar-proj', 'phone-calls', 'us-weblinks', 'yeast-grn', 'celegans-her', 'celegans-male', 'tennis-loss']
-
-    for network in indexes:
-      settings = config[network]
-      folder = settings.get('folder')
-
-      fig, ax = plt.subplots()
-      
-      custom_venn2(subsets = (df['wcc-metric'][network]-df['lscc-metric'][network], 
-                              df['lscc-edges'][network]-df['lscc-metric'][network], 
-                              df['lscc-metric'][network]), 
-                              set_labels = ('Backbone', 'LSCC'), alpha=0.7, normalize_to=df['wcc-edges'][network])
-      ax.set_title(network)
-      plt.tight_layout()
-      plt.savefig('networks/{folder:s}/components_backbone.pdf'.format(folder=folder), dpi=300)
-      #plt.show()
-      plt.clf()
-      #break
-    
-    indexes = ['bike-sharing']
-
-    for network in indexes:
-      settings = config[network]
-      folder = settings.get('folder')
-
-      fig, ax = plt.subplots()
-      
-      custom_venn2(subsets = (df['wcc-metric'][network]-df['lscc-metric'][network], 
-                              df['lscc-edges'][network]-df['lscc-metric'][network], 
-                              df['lscc-metric'][network]), 
-                              set_labels = ('Backbone', 'LSCC'), alpha=0.7, normalize_to=df['wcc-edges'][network], rounding=4)
-      ax.set_title(network)
-      plt.tight_layout()
-      plt.savefig('networks/{folder:s}/components_backbone.pdf'.format(folder=folder), dpi=300)
-      #plt.show()
-      plt.clf()
-      #break
+    for network in networks:
+        
+        folder = config[network].get('folder')
+        
+        GLS = nx.read_graphml('networks/{folder:s}/network_lscc.graphml'.format(folder=folder))
+        G = nx.read_graphml('networks/{folder:s}/network.graphml'.format(folder=folder))
+        
+        BLS = nx.read_graphml('networks/{folder:s}/backbone_lscc.graphml'.format(folder=folder))
+        B = nx.read_graphml('networks/{folder:s}/backbone.graphml'.format(folder=folder))
+        
+        metric_not_lscc = 0
+        metric_in_lscc = 0
+        semi_metric_lscc = 0
+        
+        for u, v in G.edges():
+            if B.has_edge(u, v):
+                if BLS.has_node(u) and BLS.has_node(v) and BLS.has_edge(u, v):
+                    metric_in_lscc += 1
+                else:
+                    metric_not_lscc += 1
+            elif GLS.has_node(u) and GLS.has_node(v) and GLS.has_edge(u, v):
+                semi_metric_lscc += 1
+        
+        nedges = G.number_of_edges()
+        print(network, metric_not_lscc/nedges, semi_metric_lscc/nedges, metric_in_lscc/nedges)
+        
+        fig, ax = plt.subplots()
+        custom_venn2(subsets = (metric_not_lscc, semi_metric_lscc, metric_not_lscc), 
+                     set_labels = ('Backbone', 'LSCC'), alpha=0.7, normalize_to=G.number_of_edges())
+        ax.set_title(network)
+        plt.tight_layout()
+        plt.savefig('networks/{folder:s}/components_backbone.pdf'.format(folder=folder), dpi=300)
+        plt.clf()
+        #break
